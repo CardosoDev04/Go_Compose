@@ -53,10 +53,10 @@ object Resign: Command() {
 fun getCommands(storage: Storage<String, Game>): Map<String, Command> {
     return mapOf(
         "PLAY" to Play,
-        "NEW" to object : Command() {
-            override fun execute(args: List<String>, game: Game) = Game()
-        },
-        "PASS" to Pass,
+//        "NEW" to object : Command() {
+//            override fun execute(args: List<String>, game: Game) = Game()
+//        },
+//        "PASS" to Pass,
         "SAVE" to object : Command() {
             override fun execute(args: List<String>, game: Game): Game {
                 checkNotNull(game.board) { "Game hasn't started" }
