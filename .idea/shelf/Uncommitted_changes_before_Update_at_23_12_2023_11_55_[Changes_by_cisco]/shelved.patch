@@ -1,0 +1,18 @@
+Index: src/main/kotlin/isel/tds/go/model/Clash.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package isel.tds.go.model\r\nimport isel.tds.go.storage.Storage\r\nimport kotlinx.coroutines.Dispatchers\r\nimport kotlinx.coroutines.withContext\r\n\r\n\r\nopen class Clash(val gs: GameStorage)\r\n\r\nclass ClashRun(\r\n    gs: GameStorage,\r\n    val id: String,\r\n    val me: Piece,\r\n    val game: Game\r\n): Clash(gs)\r\n\r\n\r\nfun Clash.play(position: Position): Clash {\r\n    check(this is ClashRun) {\"Game hasn't started yet!\"}\r\n    check(game.turn == me) {\"It's not your turn!\"}\r\n    val newGame = game.play(position)\r\n    gs.update(id, newGame)\r\n\r\n    return ClashRun(gs,id,me,newGame)\r\n\r\n}\r\n\r\nfun Clash.start(name: String): Clash{\r\n    val game = Game()\r\n    gs.create(name, game)\r\n    return ClashRun(gs,name,Piece.BLACK,game)\r\n}\r\n\r\nfun Clash.join(name: String): Clash{\r\n    val game = gs.read(name) ?: error(\"Game $name does not exist\")\r\n    return ClashRun(gs,name,Piece.WHITE,game)\r\n}\r\n\r\nclass NoChangesException: IllegalStateException(\"No changes were made to the game\")\r\nclass GameDeletedException: IllegalStateException(\"Game was deleted\")\r\n\r\nsuspend fun Clash.refresh(): Clash{\r\n    check(this is ClashRun) {\"Game hasn't started yet!\"}\r\n    val newGame = gs.slowRead(id,1500) ?: throw GameDeletedException()\r\n\r\n    if(game.board == newGame.board) throw NoChangesException()\r\n    return ClashRun(gs,id,me,newGame)\r\n}\r\n\r\nsuspend fun GameStorage.slowRead(key: String, delay: Long): Game? {\r\n    fun log(msg: String) = println(msg)\r\n    log(\"Starting slow read\")\r\n    val result = withContext(Dispatchers.IO){\r\n        Thread.sleep(delay)\r\n        read(key)\r\n    }\r\n    log(\"Ending slow read\")\r\n    return result\r\n}\r\n\r\nfun Clash.deleteIfIsOwner(){\r\n    check(this is ClashRun) {\"Game hasn't started yet!\"}\r\n    check (me == Piece.BLACK) {\"Only the owner can delete the game\"}\r\n    gs.delete(id)\r\n}\r\n\r\nfun Clash.newBoard(): Clash{\r\ncheck(this is ClashRun) {\"Game hasn't started yet!\"}\r\n    val newGame = Game()\r\n    gs.update(id, newGame)\r\n    return ClashRun(gs,id,me,newGame)\r\n}\r\n\r\nfun Clash.canNewBoard(): Boolean{\r\n    return this is ClashRun && game.isFinished\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/kotlin/isel/tds/go/model/Clash.kt b/src/main/kotlin/isel/tds/go/model/Clash.kt
+--- a/src/main/kotlin/isel/tds/go/model/Clash.kt	(revision 9fd10e0c9c9efd51d844b8ffb58637cba042cd5d)
++++ b/src/main/kotlin/isel/tds/go/model/Clash.kt	(date 1703332539200)
+@@ -3,6 +3,7 @@
+ import kotlinx.coroutines.Dispatchers
+ import kotlinx.coroutines.withContext
+ 
++typealias GameStorage = Storage<String, Game>
+ 
+ open class Clash(val gs: GameStorage)
+ 
