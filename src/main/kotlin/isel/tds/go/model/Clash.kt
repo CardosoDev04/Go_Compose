@@ -1,9 +1,12 @@
 package isel.tds.go.model
+
 import isel.tds.go.storage.Storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 typealias GameStorage = Storage<String, Game>
+
+
 open class Clash(val gs: GameStorage)
 
 class ClashRun(
