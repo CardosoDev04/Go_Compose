@@ -7,13 +7,35 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.application
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.window.*
+import isel.tds.go.mongo.MongoDriver
+
+
 
 @Composable
 @Preview
-fun App() {
+fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
     var text by remember { mutableStateOf("Hello, World!") }
+
+    MenuBar {
+//      Menu("Game") {
+////                Item("Start", onClick = println("Start button clicked"))
+////                Item("Join", onClick = println("Join game button clicked"))
+////            }
+////            Menu("Play") {
+////                Item("Pass", onClick = println("Pass button clicked"))
+////                Item("Captures", onClick = println("Captures button clicked"))
+////                Item("Score", onClick = println("Score button clicked"))
+////            }
+////            Menu("Options") {
+////                Item("Show Last", onClick = println("Show Last button clicked"))
+////            }
+        Menu("Game") {
+            Item("Exit", onClick = exitFunction)
+        }
+}
+
 
     MaterialTheme {
         Button(onClick = {
@@ -24,8 +46,18 @@ fun App() {
     }
 }
 
-fun main() = application {
-    Window(onCloseRequest = ::exitApplication) {
-        App()
+fun main() =
+    MongoDriver("Go").use { driver ->
+        application {
+            application {
+                Window(
+                    onCloseRequest = ::exitApplication,
+                    title = "Go",
+                    state = WindowState(size = DpSize.Unspecified)
+                ) {
+                    App(driver, ::exitApplication)
+                }
+            }
+        }
     }
-}
+
