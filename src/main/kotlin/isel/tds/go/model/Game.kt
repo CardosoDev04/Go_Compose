@@ -234,7 +234,7 @@ fun Game.score(): Pair<Int, Double> {
     var whiteScore = whiteScore
     var blackScore = blackScore.toDouble()
 
-    //We go through all the pieces in the game
+    // We go through all the pieces in the game
     for (r in 1..BOARD_SIZE) {
         for (c in 65..<65 + BOARD_SIZE) {
             if (board.boardCells[Position(r, c.toChar())] == null) {
@@ -245,7 +245,7 @@ fun Game.score(): Pair<Int, Double> {
             }
         }
     }
-    //Depending on the board size we will subtract a certain amount of points from the black player
+    // Depending on the board size we will subtract a certain amount of points from the black player
     when(BOARD_SIZE){
         9 -> blackScore -= 3.5
         13 -> blackScore -= 4.5

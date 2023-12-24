@@ -13,7 +13,7 @@ class MongoDriver(nameDb: String? = null): Closeable {
     private val client: MongoClient
     init {
 //        val envConnection = System.getenv("MONGO_CONNECTION") ?: throw MongoClientException("Missing MONGO_CONNECTION environment variable")
-        val envConnection = "mongodb+srv://HarvyDev:5NGpmF7T4fyV7dDpeVL4@cluster0.wbqjdoy.mongodb.net/?retryWrites=true&w=majority"
+        val envConnection = "mongodb+srv://HarvyDev:1234@cluster0.wbqjdoy.mongodb.net/?retryWrites=true&w=majority"
         val dbName = requireNotNull(nameDb ?: ConnectionString(envConnection).database) { "Missing dbName" }
         client = MongoClient.create(envConnection)
         db = client.getDatabase(dbName)

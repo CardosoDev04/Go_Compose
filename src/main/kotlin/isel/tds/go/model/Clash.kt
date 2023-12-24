@@ -24,7 +24,13 @@ fun Clash.play(position: Position): Clash {
     gs.update(id, newGame)
 
     return ClashRun(gs,id,me,newGame)
+}
 
+fun Clash.pass(): Clash {
+    check(this is ClashRun) { "Game hasn't started yet!" }
+    val newGame = game.pass()
+    gs.update(id, newGame)
+    return ClashRun(gs,id,me,newGame)
 }
 
 fun Clash.start(name: String): Clash{

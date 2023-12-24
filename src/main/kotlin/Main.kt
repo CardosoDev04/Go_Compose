@@ -2,38 +2,40 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
+import androidx.compose.ui.text.style.LineHeightStyle
+import androidx.compose.ui.text.style.LineHeightStyle.Alignment.*
 import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
 import isel.tds.go.mongo.MongoDriver
-
+import isel.tds.go.viewmodel.AppViewModel
+import kotlinx.coroutines.coroutineScope
 
 
 @Composable
 @Preview
 fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
     var text by remember { mutableStateOf("Hello, World!") }
+    val scope = rememberCoroutineScope()
+    val vm = remember { AppViewModel(driver, scope) }
 
     MenuBar {
-//      Menu("Game") {
-////                Item("Start", onClick = println("Start button clicked"))
-////                Item("Join", onClick = println("Join game button clicked"))
-////            }
-////            Menu("Play") {
-////                Item("Pass", onClick = println("Pass button clicked"))
-////                Item("Captures", onClick = println("Captures button clicked"))
-////                Item("Score", onClick = println("Score button clicked"))
-////            }
-////            Menu("Options") {
-////                Item("Show Last", onClick = println("Show Last button clicked"))
-////            }
         Menu("Game") {
+            Item("New", onClick = vm::showNewGameDialog)
+            Item("Join", onClick = vm::showJoinGameDialog)
             Item("Exit", onClick = exitFunction)
         }
+        Menu("Play") {
+            Item("Pass", enabled = vm.hasClash, onClick = vm::pass)
+            Item("Captures", onClick = vm::showScore) // Ainda n entendi este, provavelmente vai ter a ver com o Compose
+            Item("Score", enabled = vm.newAvailable, onClick = vm::newBoard)
+        }
+//        Menu("Options") {
+//            Item("Show Last", onClick = println("Show Last button clicked"))
+//        }
+
+
 }
 
 
@@ -49,14 +51,12 @@ fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
 fun main() =
     MongoDriver("Go").use { driver ->
         application {
-            application {
-                Window(
-                    onCloseRequest = ::exitApplication,
-                    title = "Go",
-                    state = WindowState(size = DpSize.Unspecified)
-                ) {
-                    App(driver, ::exitApplication)
-                }
+            Window(
+                onCloseRequest = ::exitApplication,
+                title = "Go",
+                state = WindowState(size = DpSize.Unspecified)
+            ) {
+                App(driver, ::exitApplication)
             }
         }
     }

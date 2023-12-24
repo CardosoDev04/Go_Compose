@@ -69,6 +69,15 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
         waitForOtherSide()
     }
 
+    fun pass() {
+        try {
+            clash = clash.pass()
+        } catch (e: Exception) {
+            errorMessage = e.message
+        }
+        waitForOtherSide()
+    }
+
     suspend fun refreshGame() {
         try {
             clash = clash.refresh()
