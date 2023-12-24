@@ -113,4 +113,8 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
             waitingJob = null
         }
     }
+
+    fun logClick(pos:Position) {
+        println("Position: $pos")
+    }
 }
