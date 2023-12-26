@@ -209,6 +209,14 @@ fun Game.end() {
 
 }
 
+/**
+ * This function is used to get the winner of the game.
+ */
+fun Game.getWinner(): Piece{
+    val(whiteScore, blackScore) = this.score()
+    return if(whiteScore > blackScore) Piece.WHITE else Piece.BLACK
+}
+
 
 /**
  * This function handles the resign command logic, for when a player wishes to end the game by quitting.
