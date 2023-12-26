@@ -14,9 +14,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
-import isel.tds.go.model.BOARD_SIZE
-import isel.tds.go.model.Piece
-import isel.tds.go.model.Position
+import isel.tds.go.model.*
 import isel.tds.go.mongo.MongoDriver
 import isel.tds.go.viewmodel.AppViewModel
 import isel.tds.go.viewmodel.AppViewModel.InputName
@@ -51,6 +49,7 @@ fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
     MaterialTheme {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             BoardView(vm.board?.boardCells, vm::play)
+            StatusBar(vm.clash, vm.me)
         }
         vm.inputName?.let {
             StartOrJoinDialog(it,
@@ -134,6 +133,27 @@ fun CapturesDialog(blackCaptures: Int, whiteCaptures: Int, closeDialog: () -> Un
         }
     )
 }
+
+@Composable
+fun StatusBar(clash: Clash, me: Piece?) {
+    Row (
+        verticalAlignment = Alignment.CenterVertically
+    ){
+        me?.let {
+            Text("You ", style = MaterialTheme.typography.h4)
+            Cell(piece = me, size = 35.dp)
+            Spacer(Modifier.width(30.dp))
+        }
+        val (txt, piece) = when (clash) {
+            is ClashRun -> if (!clash.game.isFinished) "Turn: " to clash.game.turn else "Game finished" to null // Isto ta mal, n pode ser game finished to null
+            else -> "Game hasn't started yet" to null
+        }
+        Text(text = txt, style = MaterialTheme.typography.h4)
+        Cell(piece = piece, size = 35.dp)
+    }
+}
+
+
 
 @Composable
 fun BoardView(boardCells: Map<Position, Piece?>?, onClick: (Position) -> Unit) {

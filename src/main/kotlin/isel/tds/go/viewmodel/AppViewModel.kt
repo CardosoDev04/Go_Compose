@@ -12,8 +12,8 @@ import kotlinx.coroutines.*
 
 class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
     private val storage = MongoStorage<String, Game>("games", driver, GameSerializer)
-    private var clash by mutableStateOf(Clash(storage))
-
+    var clash by mutableStateOf(Clash(storage))  // TODO(Vamos ter q mudar pq o clash tem que ser privado)
+        private set
     var viewScore by mutableStateOf(false)
         private set
     var inputName by mutableStateOf<InputName?>(null)
