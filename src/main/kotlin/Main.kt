@@ -1,6 +1,7 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -10,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -20,7 +22,7 @@ import isel.tds.go.viewmodel.AppViewModel
 import isel.tds.go.viewmodel.AppViewModel.InputName
 
 
-val CELL_SIDE = 100.dp
+val CELL_SIDE = 60.dp
 val BOARD_SIDE = CELL_SIDE * BOARD_SIZE * (BOARD_SIZE - 1)
 
 @Composable
@@ -65,9 +67,9 @@ fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
 @Composable
 fun waitingIndicator() = CircularProgressIndicator(
     modifier = Modifier
-        .fillMaxSize()
+//        .fillMaxSize()
         .padding(20.dp),
-    strokeWidth = 10.dp
+    strokeWidth = 2.dp
 )
 
 @Composable
@@ -82,8 +84,8 @@ fun StartOrJoinDialog(
         onDismissRequest = onCancel,
         title = {
             Text(text = "Name to ${type.txt}",
-            style = MaterialTheme.typography.h5
-        )},
+                style = MaterialTheme.typography.h5
+            )},
         text = {
             OutlinedTextField(
                 value = name,
@@ -171,17 +173,51 @@ fun BoardView(boardCells: Map<Position, Piece?>?, onClick: (Position) -> Unit) {
         Column(
             modifier = Modifier
                 .background(color = Color.Transparent)
-                .size(BOARD_SIDE),
+                .fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
+            // Header row with letters A-I
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(CELL_SIDE)
+            ) {
+                // Empty top-left corner square
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(1f / (BOARD_SIZE + 1))
+                )
+                repeat(BOARD_SIZE) { col ->
+                    Text(
+                        text = ('A' + col).toString(),
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .weight(1f / BOARD_SIZE),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.h5
+                    )
+                }
+            }
+
+            // Rows with numbers 9-1
             repeat(BOARD_SIZE) { row ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(CELL_SIDE)
-                        .weight(1f / BOARD_SIZE),
-                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
+                    // Left column with numbers 9-1
+                    Text(
+                        text = (BOARD_SIZE - row).toString(),
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .weight(1f / (BOARD_SIZE + 1)), // +1 to account for the letter column
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.h5
+                    )
+
+                    // Board cells
                     repeat(BOARD_SIZE) { col ->
                         val pos = Position(BOARD_SIZE - row, ('A' + col))
                         val piece = boardCells?.get(pos)
@@ -193,22 +229,33 @@ fun BoardView(boardCells: Map<Position, Piece?>?, onClick: (Position) -> Unit) {
     }
 }
 
+
+
 @Composable
-fun Cell(piece: Piece?, size: Dp = 100.dp, onClick: () -> Unit={}) {
-    val modifier = Modifier.size(size)
-    if (piece == null) {
-        Box(modifier.clickable(onClick = onClick))
-    }
-    else {
-        val filename = when (piece) {
-            Piece.BLACK -> "blackStone.png"
-            Piece.WHITE -> "whiteStone.png"
+fun Cell(piece: Piece?, size: Dp = 100.dp, onClick: () -> Unit = {}) {
+    val modifier = Modifier
+        .size(size)
+        .background(color = Color.Transparent)
+        .clickable(onClick = onClick)
+        .border(1.dp, Color.Black) // Add a border to create grid lines
+
+    Box(
+        modifier = modifier
+            .border(1.dp, Color.Black) // Add a border to create grid lines
+            .padding(2.dp) // Padding is applied to the whole cell
+            .fillMaxSize() // Make the Box fill the available space
+    ) {
+        if (piece != null) {
+            val filename = when (piece) {
+                Piece.BLACK -> "blackStone.png"
+                Piece.WHITE -> "whiteStone.png"
+            }
+            Image(
+                painter = painterResource(filename),
+                contentDescription = "Piece $piece",
+                modifier = Modifier.align(Alignment.TopStart) // Align the image to the top-left corner
+            )
         }
-        Image(
-            painter = painterResource(filename),
-            contentDescription = "Piece $piece",
-            modifier = modifier
-        )
     }
 }
 
@@ -224,4 +271,3 @@ fun main() =
             }
         }
     }
-
