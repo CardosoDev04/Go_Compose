@@ -3,9 +3,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,18 +15,19 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
 import isel.tds.go.model.BOARD_SIZE
-import isel.tds.go.model.Board
 import isel.tds.go.model.Piece
 import isel.tds.go.model.Position
 import isel.tds.go.mongo.MongoDriver
 import isel.tds.go.viewmodel.AppViewModel
+import isel.tds.go.viewmodel.AppViewModel.InputName
+
 
 val CELL_SIDE = 100.dp
+val BOARD_SIDE = CELL_SIDE * BOARD_SIZE * (BOARD_SIZE - 1)
 
 @Composable
 @Preview
 fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
-    var text by remember { mutableStateOf("Hello, World!") }
     val scope = rememberCoroutineScope()
     val vm = remember { AppViewModel(driver, scope) }
 
@@ -51,24 +50,90 @@ fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
     }
     MaterialTheme {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            BoardView(vm.board?.boardCells, vm::logClick)
+            BoardView(vm.board?.boardCells, vm::play)
         }
+        vm.inputName?.let {
+            StartOrJoinDialog(it,
+                onCancel = vm::cancelInput,
+                onAction = if (it == InputName.NEW) vm::newGame else vm::joinGame
+            )
+        }
+        if(vm.viewScore){ CapturesDialog(vm.blackCaptures, vm.whiteCaptures, vm::hideScore) }
+        if (vm.isWaiting) waitingIndicator()
     }
 }
 
-//@Composable
-//fun BoardView(boardCells: Map<Position, Piece?>?, onClick: (Position)->Unit) {
-//    val board = "board.png"
-//    Image(
-//        painter = painterResource(board),
-//        contentDescription = "Board",
-//        modifier = Modifier
-//            .size(500.dp)
-//            .background(
-//                color = Color.Black,
-//            )
-//    )
-//}
+@Composable
+fun waitingIndicator() = CircularProgressIndicator(
+    modifier = Modifier
+        .fillMaxSize()
+        .padding(20.dp),
+    strokeWidth = 10.dp
+)
+
+@Composable
+fun StartOrJoinDialog(
+    type: AppViewModel.InputName,
+    onCancel: () -> Unit,
+    onAction: (String) -> Unit
+) {
+    var name by remember { mutableStateOf("") }
+
+    AlertDialog(
+        onDismissRequest = onCancel,
+        title = {
+            Text(text = "Name to ${type.txt}",
+            style = MaterialTheme.typography.h5
+        )},
+        text = {
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                label = { Text("Name of the game") }
+            )
+        },
+        confirmButton = {
+            TextButton(
+                enabled = true,
+                onClick = { onAction(name) }
+            ) { Text(type.txt) }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onCancel
+            ) { Text("Cancel") }
+        }
+    )
+}
+
+@Composable
+fun CapturesDialog(blackCaptures: Int, whiteCaptures: Int, closeDialog: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = closeDialog,
+        confirmButton = { TextButton(onClick = closeDialog) { Text("Close") } },
+        text = {
+            Row (
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Piece.entries.forEach { piece ->
+                        Row (verticalAlignment = Alignment.CenterVertically) {
+                            Cell(piece, size = 20.dp)
+                            Text(
+                                text = "${piece.name}: ${if (piece == Piece.BLACK) blackCaptures else whiteCaptures}",
+                                style = MaterialTheme.typography.h4
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    )
+}
 
 @Composable
 fun BoardView(boardCells: Map<Position, Piece?>?, onClick: (Position) -> Unit) {
@@ -78,24 +143,32 @@ fun BoardView(boardCells: Map<Position, Piece?>?, onClick: (Position) -> Unit) {
         modifier = Modifier
             .size(width = 600.dp, height = 600.dp)
     ) {
-        // Background Image
         Image(
             painter = painterResource(board),
             contentDescription = "Board Background",
             contentScale = ContentScale.FillBounds,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
         )
-        repeat(BOARD_SIZE) { row ->
-            Row(
-                modifier = Modifier.fillMaxWidth().height(CELL_SIDE),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                repeat(BOARD_SIZE) { col ->
-                    val pos = Position(row, col.toChar()) // TODO(CHECK COORDINATES)
-                    Cell(
-                        boardCells?.get(pos),
-                        onClick = { onClick(pos) },
-                    )
+        Column(
+            modifier = Modifier
+                .background(color = Color.Transparent)
+                .size(BOARD_SIDE),
+            verticalArrangement = Arrangement.SpaceBetween,
+        ) {
+            repeat(BOARD_SIZE) { row ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(CELL_SIDE)
+                        .weight(1f / BOARD_SIZE),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    repeat(BOARD_SIZE) { col ->
+                        val pos = Position(BOARD_SIZE - row, ('A' + col))
+                        val piece = boardCells?.get(pos)
+                        Cell(piece, size = CELL_SIDE, onClick = { onClick(pos) })
+                    }
                 }
             }
         }
@@ -105,14 +178,13 @@ fun BoardView(boardCells: Map<Position, Piece?>?, onClick: (Position) -> Unit) {
 @Composable
 fun Cell(piece: Piece?, size: Dp = 100.dp, onClick: () -> Unit={}) {
     val modifier = Modifier.size(size)
-//        .background(color = Color.White)
     if (piece == null) {
         Box(modifier.clickable(onClick = onClick))
     }
     else {
         val filename = when (piece) {
-            Piece.BLACK -> "black.png"
-            Piece.WHITE -> "white.png"
+            Piece.BLACK -> "blackStone.png"
+            Piece.WHITE -> "whiteStone.png"
         }
         Image(
             painter = painterResource(filename),
@@ -122,19 +194,13 @@ fun Cell(piece: Piece?, size: Dp = 100.dp, onClick: () -> Unit={}) {
     }
 }
 
-// Constants for the board layout
-private const val numberOfColumns = 8
-private const val numberOfRows = 8
-
-
-
 fun main() =
     MongoDriver("Go").use { driver ->
         application {
             Window(
                 onCloseRequest = ::exitApplication,
                 title = "Go",
-                state = WindowState(size = DpSize.Unspecified),
+                state = rememberWindowState(size = DpSize.Unspecified),
             ) {
                 App(driver, ::exitApplication)
             }

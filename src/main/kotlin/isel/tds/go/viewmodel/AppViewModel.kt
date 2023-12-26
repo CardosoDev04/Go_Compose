@@ -20,17 +20,14 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
         private set
     var errorMessage by mutableStateOf<String?>(null)
         private set
-
     val board: Board? get() = (clash as? ClashRun)?.game?.board
-//    val score:
+    val whiteCaptures: Int get() = (clash as? ClashRun)?.game?.whiteScore ?: 0
+    val blackCaptures: Int get() = (clash as? ClashRun)?.game?.blackScore ?: 0
     val me: Piece? get() = (clash as? ClashRun)?.me
-
     val hasClash: Boolean get() = clash is ClashRun
     val newAvailable: Boolean get() = clash.canNewBoard()
-
-    private var waitingJob by mutableStateOf<Job?>(null) // ?
+    private var waitingJob by mutableStateOf<Job?>(null)
     val isWaiting: Boolean get() = waitingJob != null
-
     private val turnAvailable: Boolean get() = (clash as? ClashRun)?.game?.turn == me || newAvailable // ?
 
     fun newBoard() { clash = clash.newBoard() }
@@ -44,8 +41,10 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
     fun play(pos:Position) {
         try {
             clash = clash.play(pos)
+            println("Position: [${pos.row},${pos.col}]")
         } catch (e: Exception) {
             errorMessage = e.message
+            println(errorMessage)
         }
         waitForOtherSide()
     }
@@ -115,6 +114,6 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
     }
 
     fun logClick(pos:Position) {
-        println("Position: $pos")
+        println("Position: [${pos.row},${pos.col}]")
     }
 }
