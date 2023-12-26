@@ -37,8 +37,8 @@ fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
         }
         Menu("Play") {
             Item("Pass", enabled = vm.hasClash, onClick = vm::pass)
-            Item("Captures", onClick = vm::showScore) // Ainda n entendi este, provavelmente vai ter a ver com o Compose
-            Item("Score", enabled = vm.newAvailable, onClick = vm::newBoard)
+            Item("Captures", enabled = vm.hasClash, onClick = vm::showCaptures)
+            Item("Score", enabled = vm.newAvailable, onClick = vm::showScore)
         }
 //        Menu("Options") {
 //            Item("Show Last", onClick = println("Show Last button clicked"))
@@ -57,7 +57,7 @@ fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
                 onAction = if (it == InputName.NEW) vm::newGame else vm::joinGame
             )
         }
-        if(vm.viewScore){ CapturesDialog(vm.blackCaptures, vm.whiteCaptures, vm::hideScore) }
+        if (vm.viewCaptures){ CapturesDialog(vm.blackCaptures, vm.whiteCaptures, vm::hideCaptures) }
         if (vm.isWaiting) waitingIndicator()
     }
 }
@@ -152,8 +152,6 @@ fun StatusBar(clash: Clash, me: Piece?) {
         Cell(piece = piece, size = 35.dp)
     }
 }
-
-
 
 @Composable
 fun BoardView(boardCells: Map<Position, Piece?>?, onClick: (Position) -> Unit) {

@@ -16,6 +16,8 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
         private set
     var viewScore by mutableStateOf(false)
         private set
+    var viewCaptures by mutableStateOf(false)
+        private set
     var inputName by mutableStateOf<InputName?>(null)
         private set
     var errorMessage by mutableStateOf<String?>(null)
@@ -33,6 +35,10 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
     fun newBoard() { clash = clash.newBoard() }
 
     fun showScore() { viewScore = true }
+
+    fun showCaptures() { viewCaptures = true }
+
+    fun hideCaptures() { viewCaptures = false }
 
     fun hideScore() { viewScore = false }
 
