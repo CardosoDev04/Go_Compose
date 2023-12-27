@@ -179,7 +179,7 @@ fun StatusBar(clash: Clash, me: Piece?, winner: Piece?) {
             Spacer(Modifier.width(30.dp))
         }
         val (txt, piece) = when (clash) {
-            is ClashRun -> if (!clash.game.isFinished) "Turn: " to clash.game.turn else "Winner: " to winner // Isto ta mal, n pode ser game finished to null
+            is ClashRun -> if (!clash.game.isFinished) "Turn: " to clash.game.turn else "Winner: " to winner
             else -> "Game hasn't started yet" to null
         }
         Text(text = txt, style = MaterialTheme.typography.h4)
