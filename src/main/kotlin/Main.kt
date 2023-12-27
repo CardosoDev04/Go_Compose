@@ -49,7 +49,7 @@ fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
     }
     MaterialTheme {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            BoardView(vm.board?.boardCells, vm::play)
+            BoardView(vm.board?.boardCells, vm::logClick)
             StatusBar(vm.clash, vm.me, vm.winner)
         }
         vm.inputName?.let {
@@ -247,8 +247,33 @@ fun BoardView(boardCells: Map<Position, Piece?>?, onClick: (Position) -> Unit) {
             }
 
         }
-        Grid(8)
-        NumberColumn(9)
+        Grid(BOARD_SIZE - 1)
+        NumberColumn(BOARD_SIZE)
+
+        // Render the clickable board cells
+        Column(
+            modifier = Modifier
+                .background(color = Color.Transparent)
+                .size(BOARD_SIDE)
+                .then(Modifier.offset(y = CELL_SIDE - 20.dp, x = CELL_SIDE - 20.dp)),
+            verticalArrangement = Arrangement.SpaceBetween,
+        ) {
+            repeat(BOARD_SIZE) { row ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(CELL_SIDE)
+                        .weight(1f / BOARD_SIZE),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    repeat(BOARD_SIZE) { col ->
+                        val pos = Position(BOARD_SIZE - row, ('A' + col))
+                        val piece = boardCells?.get(pos)
+                        ClickableCell(piece, size = CELL_SIDE, onClick = { onClick(pos) })
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -297,37 +322,27 @@ fun ClickableCell(piece: Piece?, size: Dp = 50.dp, onClick: () -> Unit = {}) {
         .clickable(onClick = onClick)
 
     val boxModifier = Modifier
-        .size(size)
-        .padding(2.dp)
+        .size(CELL_SIDE)
+//        .padding(2.dp)
         .fillMaxSize()
 
-    repeat(BOARD_SIZE) {
-        Row {
-            repeat(BOARD_SIZE) {
-                Column {
-
-                    Box(
-                        modifier = boxModifier then clickableModifier
-                    ) {
-                        if (piece != null) {
-                            val filename = when (piece) {
-                                Piece.BLACK -> "blackStone.png"
-                                Piece.WHITE -> "whiteStone.png"
-                            }
-                            Image(
-                                painter = painterResource(filename),
-                                contentDescription = "Piece $piece",
-                                modifier = Modifier.align(Alignment.TopStart)
-                            )
-                        }
-                    }
-                }
+    Box(
+        modifier = boxModifier then clickableModifier
+    ) {
+        if (piece != null) {
+            val filename = when (piece) {
+                Piece.BLACK -> "blackStone.png"
+                Piece.WHITE -> "whiteStone.png"
             }
+            Image(
+                painter = painterResource(filename),
+                contentDescription = "Piece $piece",
+                modifier = Modifier.align(Alignment.TopStart)
+            )
         }
     }
-
-
 }
+
 
 @Composable
 fun Cell(piece: Piece?, size: Dp = 100.dp, onClick: () -> Unit = {}) {

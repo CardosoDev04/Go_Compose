@@ -4,14 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="55fa6239-492c-4a88-99ae-1a29301a6a5b" name="Changes" comment="+ showCaptures">
+    <list default="true" id="55fa6239-492c-4a88-99ae-1a29301a6a5b" name="Changes" comment="removed outdated comment">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/isel/tds/go/model/Clash.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/isel/tds/go/model/Clash.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/isel/tds/go/model/Game.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/isel/tds/go/model/Game.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/isel/tds/go/storage/GameSerializer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/isel/tds/go/storage/GameSerializer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/isel/tds/go/storage/MongoStorage.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/isel/tds/go/storage/MongoStorage.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/isel/tds/go/viewmodel/AppViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/isel/tds/go/viewmodel/AppViewModel.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +48,20 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "HarvyDev"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="414651ee-de3b-4e18-93ef-edb353b93736" />
+        <option name="url" value="https://github.com/CardosoDev04/Go_Compose.git" />
+      </UrlAndAccount>
+    </option>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
@@ -192,7 +201,9 @@
       <workItem from="1703602827123" duration="1512000" />
       <workItem from="1703604633667" duration="73000" />
       <workItem from="1703615324828" duration="3485000" />
-      <workItem from="1703674009312" duration="4090000" />
+      <workItem from="1703674009312" duration="6450000" />
+      <workItem from="1703695931484" duration="1673000" />
+      <workItem from="1703700198482" duration="1958000" />
     </task>
     <task id="LOCAL-00001" summary="view model implemented">
       <option name="closed" value="true" />
@@ -242,7 +253,23 @@
       <option name="project" value="LOCAL" />
       <updated>1703603596229</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="+ ScoreDialog&#10;+ fixed joining game with no plays&#10;+ implemented ErrorDialog&#10;+ fixed StatusBar game over message">
+      <option name="closed" value="true" />
+      <created>1703678371896</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1703678371896</updated>
+    </task>
+    <task id="LOCAL-00008" summary="removed outdated comment">
+      <option name="closed" value="true" />
+      <created>1703678400722</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1703678400722</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -268,6 +295,8 @@
     <MESSAGE value="+ implemented CapturesDialog&#10;+ fixed boardView, but still has bugs&#10;+ implemented StartOrJoinDialog&#10;+ implemented waitingIndicator" />
     <MESSAGE value="+ implemented statusBar" />
     <MESSAGE value="+ showCaptures" />
-    <option name="LAST_COMMIT_MESSAGE" value="+ showCaptures" />
+    <MESSAGE value="+ ScoreDialog&#10;+ fixed joining game with no plays&#10;+ implemented ErrorDialog&#10;+ fixed StatusBar game over message" />
+    <MESSAGE value="removed outdated comment" />
+    <option name="LAST_COMMIT_MESSAGE" value="removed outdated comment" />
   </component>
 </project>
