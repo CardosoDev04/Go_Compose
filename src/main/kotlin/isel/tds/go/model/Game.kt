@@ -218,6 +218,7 @@ fun Game.getWinner(): Piece{
 }
 
 
+
 /**
  * This function handles the resign command logic, for when a player wishes to end the game by quitting.
  */
