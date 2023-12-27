@@ -28,6 +28,7 @@ fun Clash.play(position: Position): Clash {
 
 fun Clash.pass(): Clash {
     check(this is ClashRun) { "Game hasn't started yet!" }
+    if (game.turn != me) error("It's not your turn!")
     val newGame = game.pass()
     gs.update(id, newGame)
     return ClashRun(gs,id,me,newGame)
@@ -42,6 +43,17 @@ fun Clash.start(name: String): Clash{
 fun Clash.join(name: String): Clash{
     val game = gs.read(name) ?: error("Game $name does not exist")
     return ClashRun(gs,name,Piece.WHITE,game)
+}
+
+fun Clash.getWinner(): Piece {
+    check(this is ClashRun) {"Game hasn't started yet!"}
+    check(game.isFinished) {"Game is not finished yet!"}
+    return game.getWinner()
+}
+
+fun Clash.getScore(): Pair<Int,Double> {
+    check(this is ClashRun) {"Game hasn't started yet!"}
+    return this.game.score()
 }
 
 class NoChangesException: IllegalStateException("No changes were made to the game")
@@ -67,9 +79,8 @@ suspend fun GameStorage.slowRead(key: String, delay: Long): Game? {
 }
 
 fun Clash.deleteIfIsOwner(){
-    check(this is ClashRun) {"Game hasn't started yet!"}
-    check (me == Piece.BLACK) {"Only the owner can delete the game"}
-    gs.delete(id)
+    if (this is ClashRun && me == Piece.BLACK)
+        gs.delete(id)
 }
 
 fun Clash.newBoard(): Clash{

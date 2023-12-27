@@ -26,7 +26,7 @@ class MongoStorage<Key, Data>(
         try {
             docs.insertDocument(Doc(key, data))
         } catch (e: MongoWriteException) {
-            throw IllegalStateException("$key already exists")
+            error("Document $key already exists")
         }
     }
 

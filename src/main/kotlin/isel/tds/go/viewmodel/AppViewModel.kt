@@ -26,8 +26,11 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
     val whiteCaptures: Int get() = (clash as? ClashRun)?.game?.whiteScore ?: 0
     val blackCaptures: Int get() = (clash as? ClashRun)?.game?.blackScore ?: 0
     val me: Piece? get() = (clash as? ClashRun)?.me
+    val score: Pair<Int, Double>? get() = (clash as? ClashRun)?.game?.score()
     val hasClash: Boolean get() = clash is ClashRun
+    val winner: Piece? get() = (clash as? ClashRun)?.game?.getWinner()
     val newAvailable: Boolean get() = clash.canNewBoard()
+    val isGameOver: Boolean get() = (clash as? ClashRun)?.game?.isFinished ?: false
     private var waitingJob by mutableStateOf<Job?>(null)
     val isWaiting: Boolean get() = waitingJob != null
     private val turnAvailable: Boolean get() = (clash as? ClashRun)?.game?.turn == me || newAvailable // ?
@@ -50,7 +53,6 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
             println("Position: [${pos.row},${pos.col}]")
         } catch (e: Exception) {
             errorMessage = e.message
-            println(errorMessage)
         }
         waitForOtherSide()
     }
