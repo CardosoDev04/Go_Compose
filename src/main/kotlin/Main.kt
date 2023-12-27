@@ -1,8 +1,5 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -170,65 +167,126 @@ fun BoardView(boardCells: Map<Position, Piece?>?, onClick: (Position) -> Unit) {
             modifier = Modifier
                 .fillMaxSize()
         )
+
         Column(
             modifier = Modifier
                 .background(color = Color.Transparent)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
-            // Header row with letters A-I
+            // Header row with letters A-I and an empty square on the right
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(CELL_SIDE)
+                    .then(Modifier.offset(y = 20.dp, x = -5.dp)),
             ) {
                 // Empty top-left corner square
                 Box(
                     modifier = Modifier
                         .fillMaxHeight()
-                        .weight(1f / (BOARD_SIZE + 1))
+                        .weight(1f / (BOARD_SIZE + 2)) // +2 for the additional empty square on the right
                 )
                 repeat(BOARD_SIZE) { col ->
                     Text(
                         text = ('A' + col).toString(),
                         modifier = Modifier
                             .fillMaxHeight()
-                            .weight(1f / BOARD_SIZE),
+                            .weight(1f / (BOARD_SIZE + 1)),
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.h5
                     )
                 }
+                // Empty square on the right
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(1f / (BOARD_SIZE + 2)) // +2 for the additional empty square on the right
+                )
             }
 
-            // Rows with numbers 9-1
-            repeat(BOARD_SIZE) { row ->
-                Row(
+        }
+        Grid(8)
+        NumberColumn(9)
+    }
+}
+
+@Composable
+fun NumberColumn(size: Int) {
+    Column (
+        modifier = Modifier
+            .offset(y = (CELL_SIDE - 5.dp), x = -(260.dp))
+
+    ){
+        for (it in 9 downTo 1){
+                Text(
+                    text = (it).toString(),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(CELL_SIDE)
-                ) {
-                    // Left column with numbers 9-1
-                    Text(
-                        text = (BOARD_SIZE - row).toString(),
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .weight(1f / (BOARD_SIZE + 1)), // +1 to account for the letter column
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.h5
-                    )
+                        .height(CELL_SIDE - 5.dp),
 
-                    // Board cells
-                    repeat(BOARD_SIZE) { col ->
-                        val pos = Position(BOARD_SIZE - row, ('A' + col))
-                        val piece = boardCells?.get(pos)
-                        Cell(piece, size = CELL_SIDE, onClick = { onClick(pos) })
-                    }
+
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.h5
+                )
+    }
+}
+}
+
+@Composable
+fun Grid(gridSize: Int){
+    Row(
+        Modifier.offset(y = 70.dp, x = 70.dp)
+    ){
+        repeat(gridSize) {
+            Column {
+                repeat(gridSize) {
+                    Cell(null, size = CELL_SIDE - 4.dp)
                 }
             }
         }
     }
 }
 
+@Composable
+fun ClickableCell(piece: Piece?, size: Dp = 50.dp, onClick: () -> Unit = {}) {
+    val clickableModifier = Modifier
+        .size(10.dp)
+        .background(color = Color.Transparent)
+        .clickable(onClick = onClick)
+
+    val boxModifier = Modifier
+        .size(size)
+        .padding(2.dp)
+        .fillMaxSize()
+
+    repeat(BOARD_SIZE) {
+        Row {
+            repeat(BOARD_SIZE) {
+                Column {
+
+                    Box(
+                        modifier = boxModifier then clickableModifier
+                    ) {
+                        if (piece != null) {
+                            val filename = when (piece) {
+                                Piece.BLACK -> "blackStone.png"
+                                Piece.WHITE -> "whiteStone.png"
+                            }
+                            Image(
+                                painter = painterResource(filename),
+                                contentDescription = "Piece $piece",
+                                modifier = Modifier.align(Alignment.TopStart)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+}
 
 
 @Composable
@@ -236,7 +294,6 @@ fun Cell(piece: Piece?, size: Dp = 100.dp, onClick: () -> Unit = {}) {
     val modifier = Modifier
         .size(size)
         .background(color = Color.Transparent)
-        .clickable(onClick = onClick)
         .border(1.dp, Color.Black) // Add a border to create grid lines
 
     Box(
