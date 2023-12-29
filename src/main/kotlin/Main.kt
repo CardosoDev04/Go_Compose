@@ -250,27 +250,65 @@ fun BoardView(boardCells: Map<Position, Piece?>?, onClick: (Position) -> Unit) {
         Grid(BOARD_SIZE - 1)
         NumberColumn(BOARD_SIZE)
 
-        // Render the clickable board cells
-        Column(
+//        // Render the clickable board cells
+//        Column(
+//            modifier = Modifier
+//                .background(color = Color.Transparent)
+//                .size(BOARD_SIDE)
+//                .then(Modifier.offset(y = CELL_SIDE - 20.dp, x = CELL_SIDE - 20.dp)),
+////            verticalArrangement = Arrangement.Center,
+//        ) {
+//            repeat(BOARD_SIZE) { row ->
+//                Row(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .height(CELL_SIDE)
+//                        .weight(1f / BOARD_SIZE),
+////                    horizontalArrangement = Arrangement.spacedBy(0.dp),
+//                ) {
+//                    repeat(BOARD_SIZE) { col ->
+//                        val pos = Position(BOARD_SIZE - row, ('A' + col))
+//                        val piece = boardCells?.get(pos)
+//                        ClickableCell(piece, size = CELL_SIDE, onClick = { onClick(pos) })
+//                    }
+//                }
+//            }
+//        }
+
+        VerticalGrid(
+            gridSize = BOARD_SIZE,
             modifier = Modifier
                 .background(color = Color.Transparent)
                 .size(BOARD_SIDE)
                 .then(Modifier.offset(y = CELL_SIDE - 20.dp, x = CELL_SIDE - 20.dp)),
-            verticalArrangement = Arrangement.SpaceBetween,
-        ) {
-            repeat(BOARD_SIZE) { row ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(CELL_SIDE)
-                        .weight(1f / BOARD_SIZE),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    repeat(BOARD_SIZE) { col ->
-                        val pos = Position(BOARD_SIZE - row, ('A' + col))
-                        val piece = boardCells?.get(pos)
-                        ClickableCell(piece, size = CELL_SIDE, onClick = { onClick(pos) })
-                    }
+        ) { row, col ->
+            val pos = Position(BOARD_SIZE - row, ('A' + col))
+            val piece = boardCells?.get(pos)
+            ClickableCell(piece, size = CELL_SIDE, onClick = { onClick(pos) })
+        }
+
+    }
+}
+
+@Composable
+fun VerticalGrid(
+    gridSize: Int,
+    modifier: Modifier = Modifier,
+    content: @Composable (row: Int, col: Int) -> Unit
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color.Transparent)
+    ) {
+        repeat(gridSize) { row ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(CELL_SIDE - 4.dp)
+            ) {
+                repeat(gridSize) { col ->
+                    content(row, col)
                 }
             }
         }
@@ -317,17 +355,17 @@ fun Grid(gridSize: Int){
 @Composable
 fun ClickableCell(piece: Piece?, size: Dp = 50.dp, onClick: () -> Unit = {}) {
     val clickableModifier = Modifier
-        .size(10.dp)
+        .size(CELL_SIDE - 4.dp)
         .background(color = Color.Transparent)
         .clickable(onClick = onClick)
 
     val boxModifier = Modifier
-        .size(CELL_SIDE)
+        .size(CELL_SIDE - 4.dp)
 //        .padding(2.dp)
         .fillMaxSize()
 
     Box(
-        modifier = boxModifier then clickableModifier
+        modifier = clickableModifier
     ) {
         if (piece != null) {
             val filename = when (piece) {
@@ -337,9 +375,17 @@ fun ClickableCell(piece: Piece?, size: Dp = 50.dp, onClick: () -> Unit = {}) {
             Image(
                 painter = painterResource(filename),
                 contentDescription = "Piece $piece",
-                modifier = Modifier.align(Alignment.TopStart)
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(size)
             )
         }
+        // Transparent Box overlay to capture clicks
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable(onClick = onClick)
+        )
     }
 }
 
@@ -349,11 +395,10 @@ fun Cell(piece: Piece?, size: Dp = 100.dp, onClick: () -> Unit = {}) {
     val modifier = Modifier
         .size(size)
         .background(color = Color.Transparent)
-        .border(1.dp, Color.Black) // Add a border to create grid lines
+        .border(2.dp, Color.Black) // Add a border to create grid lines
 
     Box(
         modifier = modifier
-            .border(1.dp, Color.Black) // Add a border to create grid lines
             .padding(2.dp) // Padding is applied to the whole cell
             .fillMaxSize() // Make the Box fill the available space
     ) {
