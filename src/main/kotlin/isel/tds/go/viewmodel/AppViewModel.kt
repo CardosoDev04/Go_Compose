@@ -12,30 +12,36 @@ import kotlinx.coroutines.*
 
 class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
     private val storage = MongoStorage<String, Game>("games", driver, GameSerializer)
-    private var clash by mutableStateOf(Clash(storage))
-
+    var clash by mutableStateOf(Clash(storage))  // TODO(Vamos ter q mudar pq o clash tem que ser privado)
+        private set
     var viewScore by mutableStateOf(false)
+        private set
+    var viewCaptures by mutableStateOf(false)
         private set
     var inputName by mutableStateOf<InputName?>(null)
         private set
     var errorMessage by mutableStateOf<String?>(null)
         private set
-
     val board: Board? get() = (clash as? ClashRun)?.game?.board
-//    val score:
+    val whiteCaptures: Int get() = (clash as? ClashRun)?.game?.whiteScore ?: 0
+    val blackCaptures: Int get() = (clash as? ClashRun)?.game?.blackScore ?: 0
     val me: Piece? get() = (clash as? ClashRun)?.me
-
+    val score: Pair<Int, Double>? get() = (clash as? ClashRun)?.game?.score()
     val hasClash: Boolean get() = clash is ClashRun
+    val winner: Piece? get() = (clash as? ClashRun)?.game?.getWinner()
     val newAvailable: Boolean get() = clash.canNewBoard()
-
-    private var waitingJob by mutableStateOf<Job?>(null) // ?
+    val isGameOver: Boolean get() = (clash as? ClashRun)?.game?.isFinished ?: false
+    private var waitingJob by mutableStateOf<Job?>(null)
     val isWaiting: Boolean get() = waitingJob != null
-
     private val turnAvailable: Boolean get() = (clash as? ClashRun)?.game?.turn == me || newAvailable // ?
 
     fun newBoard() { clash = clash.newBoard() }
 
     fun showScore() { viewScore = true }
+
+    fun showCaptures() { viewCaptures = true }
+
+    fun hideCaptures() { viewCaptures = false }
 
     fun hideScore() { viewScore = false }
 
@@ -44,6 +50,7 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
     fun play(pos:Position) {
         try {
             clash = clash.play(pos)
+            println("Position: [${pos.row},${pos.col}]")
         } catch (e: Exception) {
             errorMessage = e.message
         }
@@ -115,6 +122,6 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
     }
 
     fun logClick(pos:Position) {
-        println("Position: $pos")
+        println("Position: [${pos.row},${pos.col}]")
     }
 }

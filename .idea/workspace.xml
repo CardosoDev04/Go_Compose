@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="55fa6239-492c-4a88-99ae-1a29301a6a5b" name="Changes" comment="Menu done, except &quot;Show Last&quot; option">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/blackStone.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/board.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/whiteStone.png" afterDir="false" />
+    <list default="true" id="55fa6239-492c-4a88-99ae-1a29301a6a5b" name="Changes" comment="removed outdated comment">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
     </list>
@@ -51,6 +48,20 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "HarvyDev"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="414651ee-de3b-4e18-93ef-edb353b93736" />
+        <option name="url" value="https://github.com/CardosoDev04/Go_Compose.git" />
+      </UrlAndAccount>
+    </option>
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
@@ -146,13 +157,20 @@
       <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="MainKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
+    <configuration name="MainKt" type="JetRunConfigurationType" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="MainKt" />
       <module name="Go_Compose.main" />
+      <shortenClasspath name="NONE" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Gradle.desktop" />
+      <item itemvalue="Gradle.BoardTest" />
+      <item itemvalue="Gradle.Tests in 'isel.tds.go.model'" />
+      <item itemvalue="Kotlin.MainKt" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Kotlin.MainKt" />
@@ -164,7 +182,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-18.0.2-corretto-18.0.2-249ae16d76d6-612f61fd" />
+        <option value="jdk-17.0.9-corretto-17.0.9-3183f394aec4-8f899f12" />
       </set>
     </attachedChunks>
   </component>
@@ -180,6 +198,12 @@
       <workItem from="1703331329053" duration="1010000" />
       <workItem from="1703418479845" duration="2807000" />
       <workItem from="1703421558926" duration="3505000" />
+      <workItem from="1703602827123" duration="1512000" />
+      <workItem from="1703604633667" duration="73000" />
+      <workItem from="1703615324828" duration="3485000" />
+      <workItem from="1703674009312" duration="6450000" />
+      <workItem from="1703695931484" duration="1673000" />
+      <workItem from="1703700198482" duration="1958000" />
     </task>
     <task id="LOCAL-00001" summary="view model implemented">
       <option name="closed" value="true" />
@@ -205,17 +229,74 @@
       <option name="project" value="LOCAL" />
       <updated>1703421041971</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="+ implemented CapturesDialog&#10;+ fixed boardView, but still has bugs&#10;+ implemented StartOrJoinDialog&#10;+ implemented waitingIndicator">
+      <option name="closed" value="true" />
+      <created>1703596960771</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1703596960771</updated>
+    </task>
+    <task id="LOCAL-00005" summary="+ implemented statusBar">
+      <option name="closed" value="true" />
+      <created>1703601783769</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1703601783769</updated>
+    </task>
+    <task id="LOCAL-00006" summary="+ showCaptures">
+      <option name="closed" value="true" />
+      <created>1703603596228</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1703603596229</updated>
+    </task>
+    <task id="LOCAL-00007" summary="+ ScoreDialog&#10;+ fixed joining game with no plays&#10;+ implemented ErrorDialog&#10;+ fixed StatusBar game over message">
+      <option name="closed" value="true" />
+      <created>1703678371896</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1703678371896</updated>
+    </task>
+    <task id="LOCAL-00008" summary="removed outdated comment">
+      <option name="closed" value="true" />
+      <created>1703678400722</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1703678400722</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="view model implemented" />
     <MESSAGE value="added previous project's unit tests" />
     <MESSAGE value="Menu done, except &quot;Show Last&quot; option" />
-    <option name="LAST_COMMIT_MESSAGE" value="Menu done, except &quot;Show Last&quot; option" />
+    <MESSAGE value="add vsc.xml" />
+    <MESSAGE value="+ implemented CapturesDialog&#10;+ fixed boardView, but still has bugs&#10;+ implemented StartOrJoinDialog&#10;+ implemented waitingIndicator" />
+    <MESSAGE value="+ implemented statusBar" />
+    <MESSAGE value="+ showCaptures" />
+    <MESSAGE value="+ ScoreDialog&#10;+ fixed joining game with no plays&#10;+ implemented ErrorDialog&#10;+ fixed StatusBar game over message" />
+    <MESSAGE value="removed outdated comment" />
+    <option name="LAST_COMMIT_MESSAGE" value="removed outdated comment" />
   </component>
 </project>

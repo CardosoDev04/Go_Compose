@@ -19,6 +19,7 @@ object GameSerializer: Serializer<Game> {
      */
     override fun deserialize(data: String): Game {
         val plays = data.split("|")
+        if (plays[0].isEmpty()) return Game()
         val newCells = mutableMapOf<Position, Piece?>()
         for (play in 0..plays.size-2) {
             val position = plays[play].split(":")[0]
