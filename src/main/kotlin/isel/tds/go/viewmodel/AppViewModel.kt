@@ -64,16 +64,27 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
     fun cancelInput() { inputName = null }
 
     fun newGame(gameName: String) {
-        cancelWaiting()
-        clash = clash.start(gameName)
-        inputName = null
+        try {
+            cancelWaiting()
+            clash = clash.start(gameName)
+            inputName = null
+        }
+        catch (e: Exception) {
+            errorMessage = e.message
+        }
     }
 
     fun joinGame(gameName: String) {
-        cancelWaiting()
-        clash = clash.join(gameName)
-        inputName = null
+        try {
+            cancelWaiting()
+            clash = clash.join(gameName)
+            inputName = null
+        }
+        catch (e: Exception) {
+            errorMessage = e.message
+        }
         waitForOtherSide()
+
     }
 
     fun pass() {
@@ -97,7 +108,11 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
     fun showJoinGameDialog() { inputName = InputName.JOIN }
 
     fun exit() {
-        clash.deleteIfIsOwner()
+        try {
+            clash.deleteIfIsOwner()
+        } catch (e: Exception) {
+            errorMessage = e.message
+        }
         cancelWaiting()
     }
 

@@ -4,9 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="55fa6239-492c-4a88-99ae-1a29301a6a5b" name="Changes" comment="removed outdated comment">
+    <list default="true" id="55fa6239-492c-4a88-99ae-1a29301a6a5b" name="Changes" comment="+ Board clickable buttons">
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_12_23,_11_49_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_12_23,_12_00_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_12_23__11_49__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_12_23__12_00__Changes_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/isel/tds/go/model/Clash.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/isel/tds/go/model/Clash.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,12 +54,12 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "HarvyDev"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;HarvyDev&quot;
   }
-}]]></component>
+}</component>
   <component name="GithubPullRequestsUISettings">
     <option name="selectedUrlAndAccountId">
       <UrlAndAccount>
@@ -203,7 +208,9 @@
       <workItem from="1703615324828" duration="3485000" />
       <workItem from="1703674009312" duration="6450000" />
       <workItem from="1703695931484" duration="1673000" />
-      <workItem from="1703700198482" duration="1958000" />
+      <workItem from="1703700198482" duration="2135000" />
+      <workItem from="1703703721683" duration="7000" />
+      <workItem from="1703973129590" duration="626000" />
     </task>
     <task id="LOCAL-00001" summary="view model implemented">
       <option name="closed" value="true" />
@@ -269,7 +276,15 @@
       <option name="project" value="LOCAL" />
       <updated>1703678400722</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="+ Board clickable buttons">
+      <option name="closed" value="true" />
+      <created>1703702305847</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1703702305847</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -297,6 +312,7 @@
     <MESSAGE value="+ showCaptures" />
     <MESSAGE value="+ ScoreDialog&#10;+ fixed joining game with no plays&#10;+ implemented ErrorDialog&#10;+ fixed StatusBar game over message" />
     <MESSAGE value="removed outdated comment" />
-    <option name="LAST_COMMIT_MESSAGE" value="removed outdated comment" />
+    <MESSAGE value="+ Board clickable buttons" />
+    <option name="LAST_COMMIT_MESSAGE" value="+ Board clickable buttons" />
   </component>
 </project>

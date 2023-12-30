@@ -40,7 +40,7 @@ fun Clash.start(name: String): Clash{
     return ClashRun(gs,name,Piece.BLACK,game)
 }
 
-fun Clash.join(name: String): Clash{
+fun Clash.join(name: String): Clash {
     val game = gs.read(name) ?: error("Game $name does not exist")
     return ClashRun(gs,name,Piece.WHITE,game)
 }

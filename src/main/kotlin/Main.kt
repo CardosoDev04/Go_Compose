@@ -49,7 +49,7 @@ fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
     }
     MaterialTheme {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            BoardView(vm.board?.boardCells, vm::logClick)
+            BoardView(vm.board?.boardCells, vm::play)
             StatusBar(vm.clash, vm.me, vm.winner)
         }
         vm.inputName?.let {
@@ -60,7 +60,7 @@ fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
         }
         if (vm.viewCaptures){ CapturesDialog(vm.blackCaptures, vm.whiteCaptures, vm::hideCaptures) }
         if (vm.viewScore) { ScoreDialog(vm.score!!, vm::hideScore) }
-        vm.errorMessage?.let { ErrorDialog(it, vm::hideError) }
+        vm.errorMessage?.let { ErrorDialog(it, onClose = vm::hideError) }
         if (vm.isWaiting) waitingIndicator()
     }
 }
@@ -83,9 +83,11 @@ fun StartOrJoinDialog(
     AlertDialog(
         onDismissRequest = onCancel,
         title = {
-            Text(text = "Name to ${type.txt}",
+            Text(
+                text = "Name to ${type.txt}",
                 style = MaterialTheme.typography.h5
-            )},
+            )
+        },
         text = {
             OutlinedTextField(
                 value = name,
@@ -185,10 +187,10 @@ fun StatusBar(clash: Clash, me: Piece?, winner: Piece?) {
 }
 
 @Composable
-fun ErrorDialog(message: String, closeDialog: () -> Unit) {
+fun ErrorDialog(message: String, onClose: () -> Unit) {
     AlertDialog(
-        onDismissRequest = closeDialog,
-        confirmButton = { TextButton(onClick = closeDialog) { Text("Close") } },
+        onDismissRequest = onClose,
+        confirmButton = { TextButton(onClick = onClose) { Text("Close") } },
         text = { Text(message) }
     )
 }
