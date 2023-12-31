@@ -28,7 +28,8 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
     val me: Piece? get() = (clash as? ClashRun)?.me
     val score: Pair<Int, Double>? get() = (clash as? ClashRun)?.game?.score()
     val hasClash: Boolean get() = clash is ClashRun
-    val winner: Piece? get() = (clash as? ClashRun)?.game?.getWinner()
+//    val winner: Piece? get() = (clash as? ClashRun)?.game?.getWinner()
+    val winner: Piece? get() = try { (clash as? ClashRun)?.getWinner() } catch (e: Exception) { null }
     val newAvailable: Boolean get() = clash.canNewBoard()
     val isGameOver: Boolean get() = (clash as? ClashRun)?.game?.isFinished ?: false
     private var waitingJob by mutableStateOf<Job?>(null)
@@ -134,9 +135,5 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
             } while (!turnAvailable)
             waitingJob = null
         }
-    }
-
-    fun logClick(pos:Position) {
-        println("Position: [${pos.row},${pos.col}]")
     }
 }

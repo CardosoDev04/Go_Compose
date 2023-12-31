@@ -93,3 +93,7 @@ check(this is ClashRun) {"Game hasn't started yet!"}
 fun Clash.canNewBoard(): Boolean{
     return this is ClashRun && game.isFinished
 }
+
+fun Clash.isFinished(): Boolean{
+    return this is ClashRun && game.isFinished
+}

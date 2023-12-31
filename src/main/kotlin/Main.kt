@@ -178,7 +178,7 @@ fun StatusBar(clash: Clash, me: Piece?, winner: Piece?) {
             Spacer(Modifier.width(30.dp))
         }
         val (txt, piece) = when (clash) {
-            is ClashRun -> if (!clash.game.isFinished) "Turn: " to clash.game.turn else "Winner: " to winner
+            is ClashRun -> if (!clash.isFinished()) "Turn: " to clash.game.turn else "Winner: " to winner
             else -> "Game hasn't started yet" to null
         }
         Text(text = txt, style = MaterialTheme.typography.h4)
@@ -251,31 +251,6 @@ fun BoardView(boardCells: Map<Position, Piece?>?, onClick: (Position) -> Unit) {
         }
         Grid(BOARD_SIZE - 1)
         NumberColumn(BOARD_SIZE)
-
-//        // Render the clickable board cells
-//        Column(
-//            modifier = Modifier
-//                .background(color = Color.Transparent)
-//                .size(BOARD_SIDE)
-//                .then(Modifier.offset(y = CELL_SIDE - 20.dp, x = CELL_SIDE - 20.dp)),
-////            verticalArrangement = Arrangement.Center,
-//        ) {
-//            repeat(BOARD_SIZE) { row ->
-//                Row(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .height(CELL_SIDE)
-//                        .weight(1f / BOARD_SIZE),
-////                    horizontalArrangement = Arrangement.spacedBy(0.dp),
-//                ) {
-//                    repeat(BOARD_SIZE) { col ->
-//                        val pos = Position(BOARD_SIZE - row, ('A' + col))
-//                        val piece = boardCells?.get(pos)
-//                        ClickableCell(piece, size = CELL_SIDE, onClick = { onClick(pos) })
-//                    }
-//                }
-//            }
-//        }
 
         VerticalGrid(
             gridSize = BOARD_SIZE,
