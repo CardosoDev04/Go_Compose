@@ -35,7 +35,6 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
     var errorMessage by mutableStateOf<String?>(null)
         private set
     val lastplay: Position? get() = (clash as? ClashRun)?.game?.lastplay
-    val turn: Piece? get() = (clash as? ClashRun)?.game?.turn
     val board: Board? get() = (clash as? ClashRun)?.game?.board
     val whiteCaptures: Int get() = (clash as? ClashRun)?.game?.whiteScore ?: 0
     val blackCaptures: Int get() = (clash as? ClashRun)?.game?.blackScore ?: 0
@@ -47,19 +46,40 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
     val isGameOver: Boolean get() = (clash as? ClashRun)?.game?.isFinished ?: false
     private var waitingJob by mutableStateOf<Job?>(null)
     val isWaiting: Boolean get() = waitingJob != null
+    var viewMove: Boolean = false
     private val turnAvailable: Boolean get() = (clash as? ClashRun)?.game?.turn == me || newAvailable // ?
 
-    fun newBoard() { clash = clash.newBoard() }
+    fun newBoard() {
+        clash = clash.newBoard()
+    }
 
-    fun showScore() { viewScore = true }
+    fun showScore() {
+        viewScore = true
+    }
 
-    fun showCaptures() { viewCaptures = true }
+    fun showCaptures() {
+        viewCaptures = true
+    }
 
-    fun hideCaptures() { viewCaptures = false }
+    fun hideCaptures() {
+        viewCaptures = false
+    }
 
-    fun hideScore() { viewScore = false }
+    fun hideScore() {
+        viewScore = false
+    }
 
-    fun hideError() { errorMessage = null }
+    fun hideError() {
+        errorMessage = null
+    }
+
+    fun showMove() {
+        viewMove = true
+    }
+
+    fun hideMove() {
+        viewMove = false
+    }
 
     fun play(pos: Position) {
         try {
@@ -71,9 +91,7 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
         waitForOtherSide()
     }
 
-    enum class InputName(val txt: String) {
-        NEW("Start"), JOIN("Join")
-    }
+    enum class InputName(val txt: String) { NEW("Start"), JOIN("Join") }
 
     fun cancelInput() {
         inputName = null

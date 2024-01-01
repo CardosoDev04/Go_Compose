@@ -33,9 +33,6 @@ fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
     val scope = rememberCoroutineScope()
     val vm = remember { AppViewModel(driver, scope) }
 
-
-
-
     MenuBar {
         Menu("Game") {
             Item("New", onClick = vm::showNewGameDialog)
@@ -48,7 +45,7 @@ fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
             Item("Score", enabled = vm.isGameOver, onClick = vm::showScore)
         }
         Menu("Options") {
-            Item("Show Last", onClick = { showLast(vm.lastplay) })
+            Item("Show Last", onClick = {if (vm.viewMove) { vm.viewMove = false} else{ vm::showMove} })
         }
     }
     MaterialTheme {
@@ -66,8 +63,10 @@ fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
         if (vm.viewScore) { ScoreDialog(vm.score!!, vm::hideScore) }
         vm.errorMessage?.let { ErrorDialog(it, vm::hideError) }
         if (vm.isWaiting) waitingIndicator()
+        if(vm.viewMove) showLast(vm.lastplay)
     }
 }
+
 @Composable
 fun showLast(pos: Position?) {
 
