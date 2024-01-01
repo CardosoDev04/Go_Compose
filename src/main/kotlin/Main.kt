@@ -13,6 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.times
 import androidx.compose.ui.window.*
 import isel.tds.go.model.*
 import isel.tds.go.mongo.MongoDriver
@@ -31,6 +32,9 @@ val BOARD_SIDE = CELL_SIDE * BOARD_SIZE * (BOARD_SIZE - 1)
 fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
     val scope = rememberCoroutineScope()
     val vm = remember { AppViewModel(driver, scope) }
+    var newBoard:  Map<Position,Piece?>? = vm.board?.boardCells
+
+
 
     MenuBar {
         Menu("Game") {
@@ -43,13 +47,13 @@ fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
             Item("Captures", enabled = vm.hasClash, onClick = vm::showCaptures)
             Item("Score", enabled = vm.isGameOver, onClick = vm::showScore)
         }
-//        Menu("Options") {
-//            Item("Show Last", onClick = println("Show Last button clicked"))
-//        }
+        Menu("Options") {
+            Item("Show Last", onClick = { vm.showLast(vm.lastplay(vm.board?.boardCells, newBoard))})
+        }
     }
     MaterialTheme {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            BoardView(vm.board?.boardCells, vm::play)
+            BoardView(vm.board?.boardCells, vm::logClick)
             StatusBar(vm.clash, vm.me, vm.winner)
         }
         vm.inputName?.let {
@@ -60,8 +64,9 @@ fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
         }
         if (vm.viewCaptures){ CapturesDialog(vm.blackCaptures, vm.whiteCaptures, vm::hideCaptures) }
         if (vm.viewScore) { ScoreDialog(vm.score!!, vm::hideScore) }
-        vm.errorMessage?.let { ErrorDialog(it, onClose = vm::hideError) }
+        vm.errorMessage?.let { ErrorDialog(it, vm::hideError) }
         if (vm.isWaiting) waitingIndicator()
+        if(vm.me != vm.turn) { newBoard = vm.board?.boardCells}
     }
 }
 
@@ -83,11 +88,9 @@ fun StartOrJoinDialog(
     AlertDialog(
         onDismissRequest = onCancel,
         title = {
-            Text(
-                text = "Name to ${type.txt}",
+            Text(text = "Name to ${type.txt}",
                 style = MaterialTheme.typography.h5
-            )
-        },
+            )},
         text = {
             OutlinedTextField(
                 value = name,
@@ -178,7 +181,7 @@ fun StatusBar(clash: Clash, me: Piece?, winner: Piece?) {
             Spacer(Modifier.width(30.dp))
         }
         val (txt, piece) = when (clash) {
-            is ClashRun -> if (!clash.isFinished()) "Turn: " to clash.game.turn else "Winner: " to winner
+            is ClashRun -> if (!clash.game.isFinished) "Turn: " to clash.game.turn else "Winner: " to winner
             else -> "Game hasn't started yet" to null
         }
         Text(text = txt, style = MaterialTheme.typography.h4)
@@ -187,10 +190,10 @@ fun StatusBar(clash: Clash, me: Piece?, winner: Piece?) {
 }
 
 @Composable
-fun ErrorDialog(message: String, onClose: () -> Unit) {
+fun ErrorDialog(message: String, closeDialog: () -> Unit) {
     AlertDialog(
-        onDismissRequest = onClose,
-        confirmButton = { TextButton(onClick = onClose) { Text("Close") } },
+        onDismissRequest = closeDialog,
+        confirmButton = { TextButton(onClick = closeDialog) { Text("Close") } },
         text = { Text(message) }
     )
 }
@@ -252,40 +255,27 @@ fun BoardView(boardCells: Map<Position, Piece?>?, onClick: (Position) -> Unit) {
         Grid(BOARD_SIZE - 1)
         NumberColumn(BOARD_SIZE)
 
-        VerticalGrid(
-            gridSize = BOARD_SIZE,
+        // Render the clickable board cells
+        Column(
             modifier = Modifier
                 .background(color = Color.Transparent)
                 .size(BOARD_SIDE)
                 .then(Modifier.offset(y = CELL_SIDE - 20.dp, x = CELL_SIDE - 20.dp)),
-        ) { row, col ->
-            val pos = Position(BOARD_SIZE - row, ('A' + col))
-            val piece = boardCells?.get(pos)
-            ClickableCell(piece, size = CELL_SIDE, onClick = { onClick(pos) })
-        }
-
-    }
-}
-
-@Composable
-fun VerticalGrid(
-    gridSize: Int,
-    modifier: Modifier = Modifier,
-    content: @Composable (row: Int, col: Int) -> Unit
-) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Color.Transparent)
-    ) {
-        repeat(gridSize) { row ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(CELL_SIDE - 4.dp)
-            ) {
-                repeat(gridSize) { col ->
-                    content(row, col)
+            verticalArrangement = Arrangement.SpaceBetween,
+        ) {
+            repeat(BOARD_SIZE) { row ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(CELL_SIDE)
+                        .weight(1f / BOARD_SIZE),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    repeat(BOARD_SIZE) { col ->
+                        val pos = Position(BOARD_SIZE - row, ('A' + col))
+                        val piece = boardCells?.get(pos)
+                        ClickableCell(piece, size = CELL_SIDE, onClick = { onClick(pos) })
+                    }
                 }
             }
         }
@@ -332,17 +322,17 @@ fun Grid(gridSize: Int){
 @Composable
 fun ClickableCell(piece: Piece?, size: Dp = 50.dp, onClick: () -> Unit = {}) {
     val clickableModifier = Modifier
-        .size(CELL_SIDE - 4.dp)
+        .size(10.dp)
         .background(color = Color.Transparent)
         .clickable(onClick = onClick)
 
     val boxModifier = Modifier
-        .size(CELL_SIDE - 4.dp)
+        .size(CELL_SIDE)
 //        .padding(2.dp)
         .fillMaxSize()
 
     Box(
-        modifier = clickableModifier
+        modifier = boxModifier then clickableModifier
     ) {
         if (piece != null) {
             val filename = when (piece) {
@@ -352,17 +342,9 @@ fun ClickableCell(piece: Piece?, size: Dp = 50.dp, onClick: () -> Unit = {}) {
             Image(
                 painter = painterResource(filename),
                 contentDescription = "Piece $piece",
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(size)
+                modifier = Modifier.align(Alignment.TopStart)
             )
         }
-        // Transparent Box overlay to capture clicks
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .clickable(onClick = onClick)
-        )
     }
 }
 
@@ -372,10 +354,11 @@ fun Cell(piece: Piece?, size: Dp = 100.dp, onClick: () -> Unit = {}) {
     val modifier = Modifier
         .size(size)
         .background(color = Color.Transparent)
-        .border(2.dp, Color.Black) // Add a border to create grid lines
+        .border(1.dp, Color.Black) // Add a border to create grid lines
 
     Box(
         modifier = modifier
+            .border(1.dp, Color.Black) // Add a border to create grid lines
             .padding(2.dp) // Padding is applied to the whole cell
             .fillMaxSize() // Make the Box fill the available space
     ) {

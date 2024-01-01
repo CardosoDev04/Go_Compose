@@ -1,8 +1,20 @@
 package isel.tds.go.viewmodel
 
+import CELL_SIDE
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.times
+import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.WindowPosition.PlatformDefault.y
 import isel.tds.go.model.*
 import isel.tds.go.mongo.MongoDriver
@@ -22,14 +34,14 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
         private set
     var errorMessage by mutableStateOf<String?>(null)
         private set
+    val turn: Piece? get() = (clash as? ClashRun)?.game?.turn
     val board: Board? get() = (clash as? ClashRun)?.game?.board
     val whiteCaptures: Int get() = (clash as? ClashRun)?.game?.whiteScore ?: 0
     val blackCaptures: Int get() = (clash as? ClashRun)?.game?.blackScore ?: 0
     val me: Piece? get() = (clash as? ClashRun)?.me
     val score: Pair<Int, Double>? get() = (clash as? ClashRun)?.game?.score()
     val hasClash: Boolean get() = clash is ClashRun
-//    val winner: Piece? get() = (clash as? ClashRun)?.game?.getWinner()
-    val winner: Piece? get() = try { (clash as? ClashRun)?.getWinner() } catch (e: Exception) { null }
+    val winner: Piece? get() = (clash as? ClashRun)?.game?.getWinner()
     val newAvailable: Boolean get() = clash.canNewBoard()
     val isGameOver: Boolean get() = (clash as? ClashRun)?.game?.isFinished ?: false
     private var waitingJob by mutableStateOf<Job?>(null)
@@ -48,7 +60,7 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
 
     fun hideError() { errorMessage = null }
 
-    fun play(pos:Position) {
+    fun play(pos: Position) {
         try {
             clash = clash.play(pos)
             println("Position: [${pos.row},${pos.col}]")
@@ -62,30 +74,21 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
         NEW("Start"), JOIN("Join")
     }
 
-    fun cancelInput() { inputName = null }
+    fun cancelInput() {
+        inputName = null
+    }
 
     fun newGame(gameName: String) {
-        try {
-            cancelWaiting()
-            clash = clash.start(gameName)
-            inputName = null
-        }
-        catch (e: Exception) {
-            errorMessage = e.message
-        }
+        cancelWaiting()
+        clash = clash.start(gameName)
+        inputName = null
     }
 
     fun joinGame(gameName: String) {
-        try {
-            cancelWaiting()
-            clash = clash.join(gameName)
-            inputName = null
-        }
-        catch (e: Exception) {
-            errorMessage = e.message
-        }
+        cancelWaiting()
+        clash = clash.join(gameName)
+        inputName = null
         waitForOtherSide()
-
     }
 
     fun pass() {
@@ -105,15 +108,16 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
         }
     }
 
-    fun showNewGameDialog() { inputName = InputName.NEW }
-    fun showJoinGameDialog() { inputName = InputName.JOIN }
+    fun showNewGameDialog() {
+        inputName = InputName.NEW
+    }
+
+    fun showJoinGameDialog() {
+        inputName = InputName.JOIN
+    }
 
     fun exit() {
-        try {
-            clash.deleteIfIsOwner()
-        } catch (e: Exception) {
-            errorMessage = e.message
-        }
+        clash.deleteIfIsOwner()
         cancelWaiting()
     }
 
@@ -127,13 +131,35 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
         waitingJob = scope.launch(Dispatchers.IO) {
             do {
                 delay(3000)
-                try { clash = clash.refresh() }
-                catch (e: Exception) {
+                try {
+                    clash = clash.refresh()
+                } catch (e: Exception) {
                     errorMessage = e.message
                     if (e is GameDeletedException) clash = Clash(storage)
                 }
             } while (!turnAvailable)
             waitingJob = null
         }
+    }
+
+    fun logClick(pos: Position) {
+        println("Position: [${pos.row},${pos.col}]")
+    }
+    @Composable
+    fun showLast(pos: Position?,size: Dp = 60.dp) {
+
+        if (pos == null) return
+        val modifier = Modifier.size(CELL_SIDE).offset(x = (pos.col.code - 'A'.code + 1) * CELL_SIDE, WindowPosition.PlatformDefault.y - pos.row * CELL_SIDE)
+        Box(modifier.border(BorderStroke(2.dp, Color.Red)))
+    }
+    @Composable
+    fun lastplay(Board: Map<Position, Piece?>?, newBoard: Map<Position, Piece?>?): Position? {
+        if (Board == null || newBoard == null) return null
+        for ((pos, piece) in Board) {
+            if (newBoard.containsKey(pos) && newBoard[pos] != piece) {
+                return pos
+            }
+        }
+        return null
     }
 }
