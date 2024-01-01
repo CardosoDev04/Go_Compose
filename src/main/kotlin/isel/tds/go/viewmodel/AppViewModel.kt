@@ -146,17 +146,4 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
     fun logClick(pos: Position) {
         println("Position: [${pos.row},${pos.col}]")
     }
-
-/*
-    fun lastplay(Board: Map<Position, Piece?>?, newBoard: Map<Position, Piece?>?): Position? {
-        if (Board == null || newBoard == null) return null
-        for ((pos, piece) in Board) {
-            if (newBoard.containsKey(pos) && newBoard[pos] != piece) {
-                return pos
-            }
-        }
-        return null
-    }
-
- */
 }

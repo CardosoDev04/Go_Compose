@@ -252,6 +252,7 @@ fun Game.score(): Pair<Int, Double> {
             if (board.boardCells[Position(r, c.toChar())] == null) {
                 val x = Position(r, c.toChar()).isSurrounded(board)
 
+
                 if (x == Piece.WHITE) whiteScore++
                 else if (x == Piece.BLACK) blackScore++
             }
@@ -284,7 +285,8 @@ fun Game.pass(): Game {
             isFinished = true,
             whiteScore = whiteScore,
             blackScore = blackScore,
-            lastWasPast = true
+            lastWasPast = true,
+            lastplay = null
         )
     } else {
         return Game (
@@ -293,7 +295,8 @@ fun Game.pass(): Game {
             isFinished = this.isFinished,
             whiteScore = whiteScore,
             blackScore = blackScore,
-            lastWasPast = true
+            lastWasPast = true,
+            lastplay = null
         )
     }
 }
