@@ -34,6 +34,7 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
         private set
     var errorMessage by mutableStateOf<String?>(null)
         private set
+    val lastplay: Position? get() = (clash as? ClashRun)?.game?.lastplay
     val turn: Piece? get() = (clash as? ClashRun)?.game?.turn
     val board: Board? get() = (clash as? ClashRun)?.game?.board
     val whiteCaptures: Int get() = (clash as? ClashRun)?.game?.whiteScore ?: 0
@@ -145,14 +146,8 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
     fun logClick(pos: Position) {
         println("Position: [${pos.row},${pos.col}]")
     }
-    @Composable
-    fun showLast(pos: Position?,size: Dp = 60.dp) {
 
-        if (pos == null) return
-        val modifier = Modifier.size(CELL_SIDE).offset(x = (pos.col.code - 'A'.code + 1) * CELL_SIDE, WindowPosition.PlatformDefault.y - pos.row * CELL_SIDE)
-        Box(modifier.border(BorderStroke(2.dp, Color.Red)))
-    }
-    @Composable
+/*
     fun lastplay(Board: Map<Position, Piece?>?, newBoard: Map<Position, Piece?>?): Position? {
         if (Board == null || newBoard == null) return null
         for ((pos, piece) in Board) {
@@ -162,4 +157,6 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
         }
         return null
     }
+
+ */
 }

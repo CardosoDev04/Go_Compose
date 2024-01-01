@@ -32,7 +32,7 @@ val BOARD_SIDE = CELL_SIDE * BOARD_SIZE * (BOARD_SIZE - 1)
 fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
     val scope = rememberCoroutineScope()
     val vm = remember { AppViewModel(driver, scope) }
-    var newBoard:  Map<Position,Piece?>? = vm.board?.boardCells
+
 
 
 
@@ -48,7 +48,7 @@ fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
             Item("Score", enabled = vm.isGameOver, onClick = vm::showScore)
         }
         Menu("Options") {
-            Item("Show Last", onClick = { vm.showLast(vm.lastplay(vm.board?.boardCells, newBoard))})
+            Item("Show Last", onClick = { showLast(vm.lastplay) })
         }
     }
     MaterialTheme {
@@ -66,10 +66,15 @@ fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
         if (vm.viewScore) { ScoreDialog(vm.score!!, vm::hideScore) }
         vm.errorMessage?.let { ErrorDialog(it, vm::hideError) }
         if (vm.isWaiting) waitingIndicator()
-        if(vm.me != vm.turn) { newBoard = vm.board?.boardCells}
     }
 }
+@Composable
+fun showLast(pos: Position?) {
 
+    if (pos == null) return
+    val modifier = Modifier.size(CELL_SIDE).offset(x = (pos.col.code - 'A'.code + 1) * CELL_SIDE, WindowPosition.PlatformDefault.y - pos.row * CELL_SIDE)
+    Box(modifier.border(BorderStroke(2.dp, Color.Red)))
+}
 @Composable
 fun waitingIndicator() = CircularProgressIndicator(
     modifier = Modifier
