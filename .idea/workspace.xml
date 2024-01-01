@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="55fa6239-492c-4a88-99ae-1a29301a6a5b" name="Changes" comment="+ fixed app closing when an error occurs">
+    <list default="true" id="55fa6239-492c-4a88-99ae-1a29301a6a5b" name="Changes" comment="+ changed appViewModel winner property to access the clash class instead of the game class&#10;+ added Clash.isFinished function&#10;+ changed StatusBar winner message to access the clash isFinished function instead of the game.isFinished property">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/isel/tds/go/model/Clash.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/isel/tds/go/model/Clash.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/isel/tds/go/viewmodel/AppViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/isel/tds/go/viewmodel/AppViewModel.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -208,7 +205,7 @@
       <workItem from="1703700198482" duration="2135000" />
       <workItem from="1703703721683" duration="7000" />
       <workItem from="1703973129590" duration="784000" />
-      <workItem from="1704028877150" duration="1071000" />
+      <workItem from="1704028877150" duration="2131000" />
     </task>
     <task id="LOCAL-00001" summary="view model implemented">
       <option name="closed" value="true" />
@@ -290,7 +287,15 @@
       <option name="project" value="LOCAL" />
       <updated>1703973888962</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="+ changed appViewModel winner property to access the clash class instead of the game class&#10;+ added Clash.isFinished function&#10;+ changed StatusBar winner message to access the clash isFinished function instead of the game.isFinished property">
+      <option name="closed" value="true" />
+      <created>1704030412134</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1704030412134</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -320,6 +325,7 @@
     <MESSAGE value="removed outdated comment" />
     <MESSAGE value="+ Board clickable buttons" />
     <MESSAGE value="+ fixed app closing when an error occurs" />
-    <option name="LAST_COMMIT_MESSAGE" value="+ fixed app closing when an error occurs" />
+    <MESSAGE value="+ changed appViewModel winner property to access the clash class instead of the game class&#10;+ added Clash.isFinished function&#10;+ changed StatusBar winner message to access the clash isFinished function instead of the game.isFinished property" />
+    <option name="LAST_COMMIT_MESSAGE" value="+ changed appViewModel winner property to access the clash class instead of the game class&#10;+ added Clash.isFinished function&#10;+ changed StatusBar winner message to access the clash isFinished function instead of the game.isFinished property" />
   </component>
 </project>
