@@ -4,8 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="55fa6239-492c-4a88-99ae-1a29301a6a5b" name="Changes" comment="+ changed appViewModel winner property to access the clash class instead of the game class&#10;+ added Clash.isFinished function&#10;+ changed StatusBar winner message to access the clash isFinished function instead of the game.isFinished property">
+    <list default="true" id="55fa6239-492c-4a88-99ae-1a29301a6a5b" name="Changes" comment="+ fixed app closing when an error occurs">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_12_2023_11_55__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_12_2023_11_55__Changes_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_12_2023_11_55__Changes_by_cisco_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_23_12_2023_11_55__Changes_by_cisco_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/isel/tds/go/viewmodel/AppViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/isel/tds/go/viewmodel/AppViewModel.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +71,7 @@
   &quot;associatedIndex&quot;: 8
 }</component>
   <component name="ProjectId" id="2ZwHFt5rIK8LstpCL2NsQKplr4j" />
-  <component name="ProjectLevelVcsManager">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -105,6 +110,9 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/resources" />
+    </key>
+    <key name="CreateKotlinClassDialog.RecentsKey">
+      <recent name="isel.tds.go.viewmodel" />
     </key>
   </component>
   <component name="RunManager" selected="Kotlin.MainKt">
@@ -205,7 +213,7 @@
       <workItem from="1703700198482" duration="2135000" />
       <workItem from="1703703721683" duration="7000" />
       <workItem from="1703973129590" duration="784000" />
-      <workItem from="1704028877150" duration="2131000" />
+      <workItem from="1704028877150" duration="1071000" />
     </task>
     <task id="LOCAL-00001" summary="view model implemented">
       <option name="closed" value="true" />
@@ -287,15 +295,7 @@
       <option name="project" value="LOCAL" />
       <updated>1703973888962</updated>
     </task>
-    <task id="LOCAL-00011" summary="+ changed appViewModel winner property to access the clash class instead of the game class&#10;+ added Clash.isFinished function&#10;+ changed StatusBar winner message to access the clash isFinished function instead of the game.isFinished property">
-      <option name="closed" value="true" />
-      <created>1704030412134</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1704030412134</updated>
-    </task>
-    <option name="localTasksCounter" value="12" />
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -325,7 +325,6 @@
     <MESSAGE value="removed outdated comment" />
     <MESSAGE value="+ Board clickable buttons" />
     <MESSAGE value="+ fixed app closing when an error occurs" />
-    <MESSAGE value="+ changed appViewModel winner property to access the clash class instead of the game class&#10;+ added Clash.isFinished function&#10;+ changed StatusBar winner message to access the clash isFinished function instead of the game.isFinished property" />
-    <option name="LAST_COMMIT_MESSAGE" value="+ changed appViewModel winner property to access the clash class instead of the game class&#10;+ added Clash.isFinished function&#10;+ changed StatusBar winner message to access the clash isFinished function instead of the game.isFinished property" />
+    <option name="LAST_COMMIT_MESSAGE" value="+ fixed app closing when an error occurs" />
   </component>
 </project>
