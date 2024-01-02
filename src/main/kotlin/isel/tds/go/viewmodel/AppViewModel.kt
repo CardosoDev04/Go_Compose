@@ -34,7 +34,7 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
         private set
     var errorMessage by mutableStateOf<String?>(null)
         private set
-    val turn: Piece? get() = (clash as? ClashRun)?.game?.turn
+    val lastplay: Position? get() = (clash as? ClashRun)?.game?.lastplay
     val board: Board? get() = (clash as? ClashRun)?.game?.board
     val whiteCaptures: Int get() = (clash as? ClashRun)?.game?.whiteScore ?: 0
     val blackCaptures: Int get() = (clash as? ClashRun)?.game?.blackScore ?: 0
@@ -46,19 +46,32 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
     val isGameOver: Boolean get() = (clash as? ClashRun)?.game?.isFinished ?: false
     private var waitingJob by mutableStateOf<Job?>(null)
     val isWaiting: Boolean get() = waitingJob != null
+    var viewMove: Boolean = false
     private val turnAvailable: Boolean get() = (clash as? ClashRun)?.game?.turn == me || newAvailable // ?
 
-    fun newBoard() { clash = clash.newBoard() }
+    fun newBoard() {
+        clash = clash.newBoard()
+    }
 
-    fun showScore() { viewScore = true }
+    fun showScore() {
+        viewScore = true
+    }
 
-    fun showCaptures() { viewCaptures = true }
+    fun showCaptures() {
+        viewCaptures = true
+    }
 
-    fun hideCaptures() { viewCaptures = false }
+    fun hideCaptures() {
+        viewCaptures = false
+    }
 
-    fun hideScore() { viewScore = false }
+    fun hideScore() {
+        viewScore = false
+    }
 
-    fun hideError() { errorMessage = null }
+    fun hideError() {
+        errorMessage = null
+    }
 
     fun play(pos: Position) {
         try {
@@ -70,9 +83,7 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
         waitForOtherSide()
     }
 
-    enum class InputName(val txt: String) {
-        NEW("Start"), JOIN("Join")
-    }
+    enum class InputName(val txt: String) { NEW("Start"), JOIN("Join") }
 
     fun cancelInput() {
         inputName = null
@@ -144,22 +155,5 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
 
     fun logClick(pos: Position) {
         println("Position: [${pos.row},${pos.col}]")
-    }
-    @Composable
-    fun showLast(pos: Position?,size: Dp = 60.dp) {
-
-        if (pos == null) return
-        val modifier = Modifier.size(CELL_SIDE).offset(x = (pos.col.code - 'A'.code + 1) * CELL_SIDE, WindowPosition.PlatformDefault.y - pos.row * CELL_SIDE)
-        Box(modifier.border(BorderStroke(2.dp, Color.Red)))
-    }
-    @Composable
-    fun lastplay(Board: Map<Position, Piece?>?, newBoard: Map<Position, Piece?>?): Position? {
-        if (Board == null || newBoard == null) return null
-        for ((pos, piece) in Board) {
-            if (newBoard.containsKey(pos) && newBoard[pos] != piece) {
-                return pos
-            }
-        }
-        return null
     }
 }

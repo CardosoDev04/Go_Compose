@@ -10,7 +10,8 @@ class Game (
     val isFinished: Boolean = false,
     val whiteScore: Int = 0,
     val blackScore: Int = 0,
-    val lastWasPast: Boolean = false
+    val lastWasPast: Boolean = false,
+    val lastplay: Position? = null
     )
 
 
@@ -62,7 +63,8 @@ fun Game.play(pos:Position): Game {
             isFinished = false,
             whiteScore = whiteScore,
             blackScore = blackScore,
-            lastWasPast = false
+            lastWasPast = false,
+            lastplay = pos
         ).clean(pos)
     }
 
@@ -75,7 +77,8 @@ fun Game.play(pos:Position): Game {
         isFinished = isFinished,
         whiteScore = whiteScore,
         blackScore = blackScore,
-        lastWasPast = false
+        lastWasPast = false,
+        lastplay = pos
     ).clean(null)
 }
 
@@ -249,6 +252,7 @@ fun Game.score(): Pair<Int, Double> {
             if (board.boardCells[Position(r, c.toChar())] == null) {
                 val x = Position(r, c.toChar()).isSurrounded(board)
 
+
                 if (x == Piece.WHITE) whiteScore++
                 else if (x == Piece.BLACK) blackScore++
             }
@@ -281,7 +285,8 @@ fun Game.pass(): Game {
             isFinished = true,
             whiteScore = whiteScore,
             blackScore = blackScore,
-            lastWasPast = true
+            lastWasPast = true,
+            lastplay = null
         )
     } else {
         return Game (
@@ -290,7 +295,8 @@ fun Game.pass(): Game {
             isFinished = this.isFinished,
             whiteScore = whiteScore,
             blackScore = blackScore,
-            lastWasPast = true
+            lastWasPast = true,
+            lastplay = null
         )
     }
 }
