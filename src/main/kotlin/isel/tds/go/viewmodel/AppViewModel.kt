@@ -73,14 +73,6 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
         errorMessage = null
     }
 
-    fun showMove() {
-        viewMove = true
-    }
-
-    fun hideMove() {
-        viewMove = false
-    }
-
     fun play(pos: Position) {
         try {
             clash = clash.play(pos)

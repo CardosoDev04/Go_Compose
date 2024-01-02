@@ -13,6 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.times
 import androidx.compose.ui.window.*
 import isel.tds.go.model.*
 import isel.tds.go.mongo.MongoDriver
@@ -43,13 +44,13 @@ fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
             Item("Captures", enabled = vm.hasClash, onClick = vm::showCaptures)
             Item("Score", enabled = vm.isGameOver, onClick = vm::showScore)
         }
-//        Menu("Options") {
-//            Item("Show Last", onClick = println("Show Last button clicked"))
-//        }
+        Menu("Options") {
+            Item("Show Last", onClick = {if (vm.viewMove) { vm.viewMove = false } else { vm.viewMove = true} })
+       }
     }
     MaterialTheme {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            BoardView(vm.board?.boardCells, vm::logClick)
+            BoardView(vm.board?.boardCells, vm::play)
             StatusBar(vm.clash, vm.me, vm.winner)
         }
         vm.inputName?.let {
@@ -62,7 +63,19 @@ fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
         if (vm.viewScore) { ScoreDialog(vm.score!!, vm::hideScore) }
         vm.errorMessage?.let { ErrorDialog(it, vm::hideError) }
         if (vm.isWaiting) waitingIndicator()
+        if(vm.viewMove) showLast(vm.lastplay)
     }
+}
+@Composable
+fun showLast(pos: Position?) {
+    println("$pos")
+    if(pos == null) return
+    println("success")
+    val modifier = Modifier
+        .size(CELL_SIDE)
+        .offset(x = (pos.col.code - 'A'.code) * CELL_SIDE, y = (BOARD_SIZE - pos.row) * CELL_SIDE)
+
+    Box(modifier.border(BorderStroke(2.dp, Color.Red)))
 }
 
 @Composable
