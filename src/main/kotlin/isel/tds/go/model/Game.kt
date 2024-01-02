@@ -304,3 +304,5 @@ fun Game.pass(): Game {
         )
     }
 }
+
+fun Game.getLastPlay() = lastPlay

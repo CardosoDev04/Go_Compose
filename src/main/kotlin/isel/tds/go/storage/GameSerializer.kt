@@ -12,7 +12,7 @@ object GameSerializer: Serializer<Game> {
     override fun serialize(data: Game): String =
         data.board.boardCells.entries.joinToString("|") { (position, piece) ->
             "${position.row}${position.col}:$piece"
-        } + "|" + "${data.turn}:${data.isFinished}:${data.whiteScore}:${data.blackScore}:${data.lastWasPast}"
+        } + "|" + "${data.turn}:${data.isFinished}:${data.whiteScore}:${data.blackScore}:${data.lastWasPast}:${data.lastPlay?.row}:${data.lastPlay?.col}"
 
     /**
      * This function is used to deserialize a game, based on the serialized data.
@@ -35,7 +35,8 @@ object GameSerializer: Serializer<Game> {
             isFinished = gameInfo[1].toBoolean(),
             whiteScore = gameInfo[2].toInt(),
             blackScore = gameInfo[3].toInt(),
-            lastWasPast = gameInfo[4].toBoolean()
+            lastWasPast = gameInfo[4].toBoolean(),
+            lastPlay = if (gameInfo[5] == "null") null else Position(gameInfo[5].toInt(), gameInfo[6][0])
         )
     }
 }

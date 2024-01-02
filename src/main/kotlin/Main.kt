@@ -59,9 +59,9 @@ fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
                 onAction = if (it == InputName.NEW) vm::newGame else vm::joinGame
             )
         }
-        if (vm.viewCaptures){ CapturesDialog(vm.blackCaptures, vm.whiteCaptures, vm::hideCaptures) }
+        if (vm.viewCaptures) { CapturesDialog(vm.blackCaptures, vm.whiteCaptures, vm::hideCaptures) }
         if (vm.viewScore) { ScoreDialog(vm.score!!, vm::hideScore) }
-        if (vm.showLast) { showLast(vm.lastMove) }
+        if (vm.showLast) { showLast(vm.lastPlay, vm::hideLast) }
         vm.errorMessage?.let { ErrorDialog(it, vm::hideError) }
         if (vm.isWaiting) waitingIndicator()
     }
@@ -393,8 +393,9 @@ fun Cell(piece: Piece?, size: Dp = 100.dp, onClick: () -> Unit = {}) {
 }
 
 @Composable
-fun showLast(pos:Position?) {
-    println("$pos")
+fun showLast(pos:Position?, closeDialog: () -> Unit) {
+    println("[${pos?.row}, ${pos?.col}]")
+    closeDialog()
 }
 
 fun main() =

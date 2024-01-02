@@ -50,6 +50,12 @@ fun Clash.getWinner(): Piece {
     return game.getWinner()
 }
 
+fun Clash.getLastPlay(): Position? {
+    check(this is ClashRun) {"Game hasn't started yet!"}
+    val game = gs.read(id)
+    return game?.lastPlay
+}
+
 fun Clash.getScore(): Pair<Int,Double> {
     check(this is ClashRun) {"Game hasn't started yet!"}
     return this.game.score()

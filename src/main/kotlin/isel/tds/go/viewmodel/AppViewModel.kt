@@ -36,8 +36,7 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
     private val turnAvailable: Boolean get() = (clash as? ClashRun)?.game?.turn == me || newAvailable // ?
     var showLast by mutableStateOf(false)
         private set
-    var lastMove: Position? = null
-
+    val lastPlay: Position? get() = clash.getLastPlay()
     fun newBoard() { clash = clash.newBoard() }
 
     fun showScore() { viewScore = true }
@@ -56,8 +55,6 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
 
     fun play(pos: Position) {
         try {
-            lastMove = (clash as? ClashRun)?.game?.lastPlay
-            println("Last move: [${lastMove?.row},${lastMove?.col}]")
             clash = clash.play(pos)
         } catch (e: Exception) {
             errorMessage = e.message
