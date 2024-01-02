@@ -45,7 +45,7 @@ fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
             Item("Score", enabled = vm.isGameOver, onClick = vm::showScore)
         }
         Menu("Options") {
-            Item("Show Last", onClick = {if (vm.viewMove) { vm.viewMove = false } else { vm.viewMove = true} })
+            Item("Show Last", enabled = vm.hasClash, onClick = vm::showLast)
        }
     }
     MaterialTheme {
@@ -61,21 +61,10 @@ fun FrameWindowScope.App(driver: MongoDriver, exitFunction: () -> Unit) {
         }
         if (vm.viewCaptures){ CapturesDialog(vm.blackCaptures, vm.whiteCaptures, vm::hideCaptures) }
         if (vm.viewScore) { ScoreDialog(vm.score!!, vm::hideScore) }
+        if (vm.showLast) { showLast(vm.lastMove) }
         vm.errorMessage?.let { ErrorDialog(it, vm::hideError) }
         if (vm.isWaiting) waitingIndicator()
-        if(vm.viewMove) showLast(vm.lastplay)
     }
-}
-@Composable
-fun showLast(pos: Position?) {
-    println("$pos")
-    if(pos == null) return
-    println("success")
-    val modifier = Modifier
-        .size(CELL_SIDE)
-        .offset(x = (pos.col.code - 'A'.code) * CELL_SIDE, y = (BOARD_SIZE - pos.row) * CELL_SIDE)
-
-    Box(modifier.border(BorderStroke(2.dp, Color.Red)))
 }
 
 @Composable
@@ -263,31 +252,6 @@ fun BoardView(boardCells: Map<Position, Piece?>?, onClick: (Position) -> Unit) {
         Grid(BOARD_SIZE - 1)
         NumberColumn(BOARD_SIZE)
 
-//        // Render the clickable board cells
-//        Column(
-//            modifier = Modifier
-//                .background(color = Color.Transparent)
-//                .size(BOARD_SIDE)
-//                .then(Modifier.offset(y = CELL_SIDE - 20.dp, x = CELL_SIDE - 20.dp)),
-////            verticalArrangement = Arrangement.Center,
-//        ) {
-//            repeat(BOARD_SIZE) { row ->
-//                Row(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .height(CELL_SIDE)
-//                        .weight(1f / BOARD_SIZE),
-////                    horizontalArrangement = Arrangement.spacedBy(0.dp),
-//                ) {
-//                    repeat(BOARD_SIZE) { col ->
-//                        val pos = Position(BOARD_SIZE - row, ('A' + col))
-//                        val piece = boardCells?.get(pos)
-//                        ClickableCell(piece, size = CELL_SIDE, onClick = { onClick(pos) })
-//                    }
-//                }
-//            }
-//        }
-
         VerticalGrid(
             gridSize = BOARD_SIZE,
             modifier = Modifier
@@ -374,7 +338,6 @@ fun ClickableCell(piece: Piece?, size: Dp = 50.dp, onClick: () -> Unit = {}) {
 
     val boxModifier = Modifier
         .size(CELL_SIDE - 4.dp)
-//        .padding(2.dp)
         .fillMaxSize()
 
     Box(
@@ -427,6 +390,11 @@ fun Cell(piece: Piece?, size: Dp = 100.dp, onClick: () -> Unit = {}) {
             )
         }
     }
+}
+
+@Composable
+fun showLast(pos:Position?) {
+    println("$pos")
 }
 
 fun main() =

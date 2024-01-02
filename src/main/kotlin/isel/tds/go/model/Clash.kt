@@ -22,7 +22,6 @@ fun Clash.play(position: Position): Clash {
     check(game.turn == me) {"It's not your turn!"}
     val newGame = game.play(position)
     gs.update(id, newGame)
-
     return ClashRun(gs,id,me,newGame)
 }
 

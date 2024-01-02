@@ -1,21 +1,8 @@
 package isel.tds.go.viewmodel
 
-import CELL_SIDE
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.times
-import androidx.compose.ui.window.WindowPosition
-import androidx.compose.ui.window.WindowPosition.PlatformDefault.y
 import isel.tds.go.model.*
 import isel.tds.go.mongo.MongoDriver
 import isel.tds.go.storage.GameSerializer
@@ -34,7 +21,6 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
         private set
     var errorMessage by mutableStateOf<String?>(null)
         private set
-    val lastplay: Position? get() = (clash as? ClashRun)?.game?.lastplay
     val board: Board? get() = (clash as? ClashRun)?.game?.board
     val whiteCaptures: Int get() = (clash as? ClashRun)?.game?.whiteScore ?: 0
     val blackCaptures: Int get() = (clash as? ClashRun)?.game?.blackScore ?: 0
@@ -48,35 +34,31 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
     val isWaiting: Boolean get() = waitingJob != null
     var viewMove: Boolean = false
     private val turnAvailable: Boolean get() = (clash as? ClashRun)?.game?.turn == me || newAvailable // ?
+    var showLast by mutableStateOf(false)
+        private set
+    var lastMove: Position? = null
 
-    fun newBoard() {
-        clash = clash.newBoard()
-    }
+    fun newBoard() { clash = clash.newBoard() }
 
-    fun showScore() {
-        viewScore = true
-    }
+    fun showScore() { viewScore = true }
 
-    fun showCaptures() {
-        viewCaptures = true
-    }
+    fun showCaptures() { viewCaptures = true }
 
-    fun hideCaptures() {
-        viewCaptures = false
-    }
+    fun showLast() { showLast = true }
 
-    fun hideScore() {
-        viewScore = false
-    }
+    fun hideCaptures() { viewCaptures = false }
 
-    fun hideError() {
-        errorMessage = null
-    }
+    fun hideScore() { viewScore = false }
+
+    fun hideError() { errorMessage = null }
+
+    fun hideLast() { showLast = false }
 
     fun play(pos: Position) {
         try {
+            lastMove = (clash as? ClashRun)?.game?.lastPlay
+            println("Last move: [${lastMove?.row},${lastMove?.col}]")
             clash = clash.play(pos)
-            println("Position: [${pos.row},${pos.col}]")
         } catch (e: Exception) {
             errorMessage = e.message
         }
@@ -90,15 +72,25 @@ class AppViewModel(driver: MongoDriver, val scope: CoroutineScope) {
     }
 
     fun newGame(gameName: String) {
-        cancelWaiting()
-        clash = clash.start(gameName)
-        inputName = null
+        try {
+            cancelWaiting()
+            clash = clash.start(gameName)
+            inputName = null
+        }
+        catch (e: Exception) {
+            errorMessage = e.message
+        }
     }
 
     fun joinGame(gameName: String) {
-        cancelWaiting()
-        clash = clash.join(gameName)
-        inputName = null
+        try {
+            cancelWaiting()
+            clash = clash.join(gameName)
+            inputName = null
+        }
+        catch (e: Exception) {
+            errorMessage = e.message
+        }
         waitForOtherSide()
     }
 

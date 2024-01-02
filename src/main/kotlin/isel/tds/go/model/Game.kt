@@ -11,7 +11,7 @@ class Game (
     val whiteScore: Int = 0,
     val blackScore: Int = 0,
     val lastWasPast: Boolean = false,
-    val lastplay: Position? = null
+    val lastPlay: Position? = null
     )
 
 
@@ -64,21 +64,21 @@ fun Game.play(pos:Position): Game {
             whiteScore = whiteScore,
             blackScore = blackScore,
             lastWasPast = false,
-            lastplay = pos
+            lastPlay = pos
         ).clean(pos)
     }
 
     val newBoardCells = this.board.boardCells.toMutableMap()
     newBoardCells[pos] = this.turn
 
-    return Game(
+    return Game (
         board = Board(newBoardCells),
         turn = turn.other,
         isFinished = isFinished,
         whiteScore = whiteScore,
         blackScore = blackScore,
         lastWasPast = false,
-        lastplay = pos
+        lastPlay = pos
     ).clean(null)
 }
 
@@ -103,7 +103,8 @@ fun Game.hasLibertiesAfterPlay(pos:Position): Boolean {
         isFinished = isFinished,
         whiteScore = whiteScore,
         blackScore = blackScore,
-        lastWasPast = lastWasPast
+        lastWasPast = lastWasPast,
+        lastPlay = this.lastPlay
     ).clean(null)
 
     return !(newGame.board.boardCells[Position(pos.row, pos.col - 1)] == leftPiece &&
@@ -161,7 +162,8 @@ fun Game.isSuicide(pos: Position): Boolean{
             isFinished = isFinished,
             whiteScore = whiteScore,
             blackScore = blackScore,
-            lastWasPast = lastWasPast
+            lastWasPast = lastWasPast,
+            lastPlay = this.lastPlay
         ).exploreLiberties(pos,pos, mutableSetOf())
         return liberties == 0
     }
@@ -193,7 +195,8 @@ fun Game.clean(except: Position?): Game {
         isFinished = isFinished,
         whiteScore = newWhiteCaptures,
         blackScore = newBlackCaptures,
-        lastWasPast = lastWasPast
+        lastWasPast = lastWasPast,
+        lastPlay = this.lastPlay
     )
 }
 
@@ -233,7 +236,8 @@ fun Game.resign(): Game {
         isFinished = true,
         whiteScore = whiteScore,
         blackScore = blackScore,
-        lastWasPast = false
+        lastWasPast = false,
+        lastPlay = this.lastPlay
     )
 }
 
@@ -286,7 +290,7 @@ fun Game.pass(): Game {
             whiteScore = whiteScore,
             blackScore = blackScore,
             lastWasPast = true,
-            lastplay = null
+            lastPlay = null
         )
     } else {
         return Game (
@@ -296,7 +300,7 @@ fun Game.pass(): Game {
             whiteScore = whiteScore,
             blackScore = blackScore,
             lastWasPast = true,
-            lastplay = null
+            lastPlay = null
         )
     }
 }
