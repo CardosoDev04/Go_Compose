@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="55fa6239-492c-4a88-99ae-1a29301a6a5b" name="Changes" comment="removed outdated comment">
+    <list default="true" id="55fa6239-492c-4a88-99ae-1a29301a6a5b" name="Changes" comment="+">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/isel/tds/go/viewmodel/AppViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/isel/tds/go/viewmodel/AppViewModel.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +68,7 @@
   &quot;associatedIndex&quot;: 8
 }</component>
   <component name="ProjectId" id="2ZwHFt5rIK8LstpCL2NsQKplr4j" />
-  <component name="ProjectLevelVcsManager">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -106,6 +107,9 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/resources" />
+    </key>
+    <key name="CreateKotlinClassDialog.RecentsKey">
+      <recent name="isel.tds.go.viewmodel" />
     </key>
   </component>
   <component name="RunManager" selected="Kotlin.MainKt">
@@ -203,7 +207,10 @@
       <workItem from="1703615324828" duration="3485000" />
       <workItem from="1703674009312" duration="6450000" />
       <workItem from="1703695931484" duration="1673000" />
-      <workItem from="1703700198482" duration="1958000" />
+      <workItem from="1703700198482" duration="2135000" />
+      <workItem from="1703703721683" duration="7000" />
+      <workItem from="1703973129590" duration="784000" />
+      <workItem from="1704028877150" duration="1071000" />
     </task>
     <task id="LOCAL-00001" summary="view model implemented">
       <option name="closed" value="true" />
@@ -269,7 +276,47 @@
       <option name="project" value="LOCAL" />
       <updated>1703678400722</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="+ Board clickable buttons">
+      <option name="closed" value="true" />
+      <created>1703702305847</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1703702305847</updated>
+    </task>
+    <task id="LOCAL-00010" summary="+ fixed app closing when an error occurs">
+      <option name="closed" value="true" />
+      <created>1703973888961</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1703973888962</updated>
+    </task>
+    <task id="LOCAL-00011" summary="+ functions showLast and lastplay">
+      <option name="closed" value="true" />
+      <created>1704142837656</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1704142837656</updated>
+    </task>
+    <task id="LOCAL-00012" summary="+">
+      <option name="closed" value="true" />
+      <created>1704144210208</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1704144210208</updated>
+    </task>
+    <task id="LOCAL-00013" summary="+">
+      <option name="closed" value="true" />
+      <created>1704144439021</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1704144439021</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -297,6 +344,10 @@
     <MESSAGE value="+ showCaptures" />
     <MESSAGE value="+ ScoreDialog&#10;+ fixed joining game with no plays&#10;+ implemented ErrorDialog&#10;+ fixed StatusBar game over message" />
     <MESSAGE value="removed outdated comment" />
-    <option name="LAST_COMMIT_MESSAGE" value="removed outdated comment" />
+    <MESSAGE value="+ Board clickable buttons" />
+    <MESSAGE value="+ fixed app closing when an error occurs" />
+    <MESSAGE value="+ functions showLast and lastplay" />
+    <MESSAGE value="+" />
+    <option name="LAST_COMMIT_MESSAGE" value="+" />
   </component>
 </project>

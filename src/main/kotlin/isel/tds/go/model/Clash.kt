@@ -40,7 +40,7 @@ fun Clash.start(name: String): Clash{
     return ClashRun(gs,name,Piece.BLACK,game)
 }
 
-fun Clash.join(name: String): Clash{
+fun Clash.join(name: String): Clash {
     val game = gs.read(name) ?: error("Game $name does not exist")
     return ClashRun(gs,name,Piece.WHITE,game)
 }
@@ -91,5 +91,9 @@ check(this is ClashRun) {"Game hasn't started yet!"}
 }
 
 fun Clash.canNewBoard(): Boolean{
+    return this is ClashRun && game.isFinished
+}
+
+fun Clash.isFinished(): Boolean{
     return this is ClashRun && game.isFinished
 }
